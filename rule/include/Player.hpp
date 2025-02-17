@@ -11,7 +11,8 @@
 #include "Card.hpp"
 #include "Deck.hpp"
 
-class Player {
+class Player
+{
 protected:
     std::vector<std::shared_ptr<Card>> hand;
     std::string name;
@@ -37,3 +38,4 @@ public:
 
 #endif // PLAYER_HPP
 
+//

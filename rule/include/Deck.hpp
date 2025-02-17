@@ -14,7 +14,8 @@
 #include "NormalCard.hpp"
 #include "JokerCard.hpp"
 
-class Deck {
+class Deck
+{
 private:
     std::vector<std::shared_ptr<Card>> cards;
 public:

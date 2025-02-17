@@ -7,7 +7,8 @@
 
 #include "Card.hpp"
 
-class NormalCard : public Card {
+class NormalCard : public Card
+{
 private:
     std::string color;
     std::string shape;
@@ -18,9 +19,11 @@ public:
     std::string getType() const override;
     std::string getValue() const override;
     std::string getShape() const override;
+    std::string getColor() const override;
     std::string getFullInfo() const override;
     int getAttackPower() const override;
     bool canDefend(const std::shared_ptr<Card>& attackCard, const std::shared_ptr<Card>& dummyCard) const override;
+    bool useJQK() const override;
 };
 
 #endif //NORMALCARD_HPP

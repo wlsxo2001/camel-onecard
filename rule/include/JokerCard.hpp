@@ -7,7 +7,8 @@
 
 #include "Card.hpp"
 
-class JokerCard : public Card {
+class JokerCard : public Card
+{
 private:
     std::string type;
 public:
@@ -16,9 +17,10 @@ public:
     std::string getType() const override;
     std::string getValue() const override;
     std::string getShape() const override;
+    std::string getColor() const override;
     std::string getFullInfo() const override;
     int getAttackPower() const override;
-    bool canPlayJoker(const std::string& currentShape) const override;
+    bool canPlayJoker(const std::string& dummyColor) const override;
 };
 
 #endif //JOKERCARD_HPP

@@ -1,11 +1,14 @@
 #include "Game.hpp"
 
-Game::Game() {
+Game::Game()
+{
     players.push_back(std::make_shared<Player>("player1"));
     players.push_back(std::make_shared<Player>("player2"));
 
-    for (auto &player : players) {
-        for (int i = 0; i < 5; i++) {
+    for (auto &player : players)
+    {
+        for (int i = 0; i < 5; i++)
+        {
             player->drawCard(deck.draw()); // 5장 뽑기
         }
         player->showHand();
@@ -13,14 +16,16 @@ Game::Game() {
     dummyCard = deck.draw();
 }
 
-void Game::start() {
+void Game::start()
+{
     std::cout << "게임 시작!" << std::endl;
     std::this_thread::sleep_for(std::chrono::seconds(1));
 
     size_t currentPlayerIndex = 0;
     int attackStack = 0;
 
-    while (true) {
+    while (true)
+    {
         std::cout << "현재 더미 카드: ";
         dummyCard->display();
         std::cout << std::endl;
@@ -32,14 +37,17 @@ void Game::start() {
         auto &currentPlayer = players[currentPlayerIndex];
 
         // 공격 카드 처리
-        if (dummyCard->getAttackPower() > 0 && std::find(usedAttackCards.begin(), usedAttackCards.end(), dummyCard) == usedAttackCards.end()) {
+        if (dummyCard->getAttackPower() > 0 && std::find(usedAttackCards.begin(), usedAttackCards.end(), dummyCard) == usedAttackCards.end())
+        {
             attackStack += dummyCard->getAttackPower();
 
             // 조커 공격 처리
-            if (dummyCard->getType() == "Joker") {
-                std::cout << currentPlayer->getName() << "가 Joker 공격을 당해 " << attackStack << "장의 카드를 뽑습니다." << std::endl;
+            if (dummyCard->getType() == "Joker")
+            {
+                std::cout << currentPlayer->getName() << "가 Joker 공격을 당해 " << attackStack << "장의 카드를 뽑아야 합니다." << std::endl;
                 std::this_thread::sleep_for(std::chrono::seconds(1));
-                for (int i = 0; i < attackStack; i++) {
+                for (int i = 0; i < attackStack; i++)
+                {
                     auto drawnCard = deck.draw();
                     currentPlayer->drawCard(drawnCard);
                     std::cout << currentPlayer->getName() << "가 덱에서 " << drawnCard->getFullInfo() << "를 뽑았습니다." << std::endl;
@@ -48,10 +56,15 @@ void Game::start() {
                 std::this_thread::sleep_for(std::chrono::seconds(1));
                 if (currentPlayer->checkGameOver(currentPlayer, players, currentPlayerIndex, deck)) return;
                 attackStack = 0;
-            } else {
+                usedAttackCards.push_back(dummyCard);
+            }
+            else
+            {
                 // 방어 가능 여부 확인
-                for (const auto& card : currentPlayer->getHand()) {
-                    if (card->canDefend(card, dummyCard)) {
+                for (const auto& card : currentPlayer->getHand())
+                {
+                    if (card->canDefend(card, dummyCard)) // canDefend by Defense card or Attack card
+                    {
                         defended = true;
                         currentPlayer->playCard(card);
                         attackStack = (card->getAttackPower() > 0) ? attackStack + card->getAttackPower() : 0;
@@ -60,7 +73,7 @@ void Game::start() {
                         std::this_thread::sleep_for(std::chrono::seconds(1));
                         currentPlayer->showHand();
                         if (currentPlayer->checkGameOver(currentPlayer, players, currentPlayerIndex, deck)) return;
-                        attackStack = 0;
+                        if ( card->getValue() == "3" ) attackStack = 0; // else make higher attackStack
                         dummyCard->display();
                         std::cout << std::endl;
                         break;
@@ -68,10 +81,12 @@ void Game::start() {
                 }
 
                 // 방어 실패 시 카드 뽑기
-                if (!defended) {
+                if (!defended)
+                {
                     std::cout << currentPlayer->getName() << "가 공격당해 " << attackStack << "장의 카드를 뽑습니다." << std::endl;
                     std::this_thread::sleep_for(std::chrono::seconds(1));
-                    for (int i = 0; i < attackStack; i++) {
+                    for (int i = 0; i < attackStack; i++)
+                    {
                         auto drawnCard = deck.draw();
                         currentPlayer->drawCard(drawnCard);
                         std::cout << currentPlayer->getName() << "가 덱에서 " << drawnCard->getFullInfo() << "를 뽑았습니다." << std::endl;
@@ -82,15 +97,20 @@ void Game::start() {
                     attackStack = 0;
                 }
             }
-        } else {
+        }
+
+        else
+        {
             // 일반 카드 플레이
             bool played = false;
             int cnt = 0;
-
+            int JQKcnt = 0;
             do {
                 played = false;
-                for (const auto& card : currentPlayer->getHand()) {
-                    if (currentPlayer->canPlayCard(card, dummyCard, cnt == 0)) {
+                for (const auto& card : currentPlayer->getHand())
+                {
+                    if (currentPlayer->canPlayCard(card, dummyCard, cnt == 0))
+                    {
                         std::cout << currentPlayer->getName() << "가 " << card->getFullInfo() << "를 냈습니다." << std::endl;
                         std::this_thread::sleep_for(std::chrono::seconds(1));
                         cnt++;
@@ -99,13 +119,20 @@ void Game::start() {
                         currentPlayer->playCard(card);
                         currentPlayer->showHand();
                         if (currentPlayer->checkGameOver(currentPlayer, players, currentPlayerIndex, deck)) return;
+                        if (card->useJQK()) // repeat 1 turn if J,K
+                        {
+                            std::cout << currentPlayer->getName() << "가 " << card->getValue() << "를 냈으므로 한턴 더 플레이 합니다." << std::endl;
+                            JQKcnt++;
+                        }
                         break;
                     }
                 }
+                if (JQKcnt > 0) break;
             } while (played);
-
+            if (JQKcnt > 0) continue; // one more turn
             // 카드가 없으면 한 장 뽑기
-            if (cnt == 0) {
+            if (cnt == 0)
+            {
                 auto drawnCard = deck.draw();
                 currentPlayer->drawCard(drawnCard);
                 std::cout << currentPlayer->getName() << "가 낼 카드가 없어 한 장을 뽑습니다." << std::endl;

@@ -1,0 +1,6 @@
+/home/jintae/CLionProjects/Onecard/cmake-build-debug/CMakeFiles/Onecard.dir
+/home/jintae/CLionProjects/Onecard/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/jintae/CLionProjects/Onecard/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/jintae/CLionProjects/Onecard/cmake-build-debug/rule/CMakeFiles/rule.dir
+/home/jintae/CLionProjects/Onecard/cmake-build-debug/rule/CMakeFiles/edit_cache.dir
+/home/jintae/CLionProjects/Onecard/cmake-build-debug/rule/CMakeFiles/rebuild_cache.dir

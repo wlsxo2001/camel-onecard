@@ -14,7 +14,8 @@
 #include "Deck.hpp"
 #include "Player.hpp"
 
-class Game {
+class Game
+{
 private:
     Deck deck;
     std::vector<std::shared_ptr<Player>> players;
