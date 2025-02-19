@@ -15,3 +15,13 @@ bool Card::canPlayJoker(const std::string& dummyShape) const
     return false;
 }
 
+void Card::changeShape(const std::string& newShape)
+{
+}
+void Card::changeColor(const std::string& newColor)
+{
+}
+
+void Card::change7(const std::shared_ptr<Card>& dummyCard)
+{
+}

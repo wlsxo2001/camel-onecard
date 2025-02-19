@@ -24,6 +24,10 @@ public:
     int getAttackPower() const override;
     bool canDefend(const std::shared_ptr<Card>& attackCard, const std::shared_ptr<Card>& dummyCard) const override;
     bool useJQK() const override;
+    void changeShape(const std::string& newShape) override;
+    void changeColor(const std::string& newColor) override;
+    void change7(const std::shared_ptr<Card>& dummyCard) override;
 };
 
 #endif //NORMALCARD_HPP
+

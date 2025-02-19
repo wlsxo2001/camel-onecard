@@ -24,6 +24,9 @@ public:
     virtual bool canDefend(const std::shared_ptr<Card>& attackCard, const std::shared_ptr<Card>& dummyCard) const;
     virtual bool canPlayJoker(const std::string& currentShape) const;
     virtual bool useJQK() const {return false;}
+    virtual void changeShape(const std::string& newShape);
+    virtual void changeColor(const std::string& newColor);
+    virtual void change7(const std::shared_ptr<Card>& dummyCard) ;
     virtual ~Card() {}
 };
 

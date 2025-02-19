@@ -35,7 +35,7 @@ std::vector<std::shared_ptr<Card>> Player::getHand() const
     return hand;
 }
 
-void Player::playCard(std::shared_ptr<Card> playedCard)
+void Player::playCard(std::shared_ptr<Card> playedCard) //사용했던 카드를 hand에서 제거
 {
     auto it = std::find(hand.begin(), hand.end(), playedCard);
     if (it != hand.end())

@@ -34,7 +34,7 @@ std::shared_ptr<Card> Deck::draw()
 {
     if (cards.empty())
     {
-        std::cout << "덱의 모든 카드가 소진되었습니다!" << std::endl;
+        //std::cout << "덱의 모든 카드가 소진되었습니다!" << std::endl;
         return nullptr;
     }
     auto card = cards.back();

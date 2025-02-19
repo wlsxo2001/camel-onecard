@@ -47,3 +47,14 @@ bool JokerCard::canPlayJoker(const std::string& dummyColor) const
     return (type == "Colored" && (dummyColor == "Red")) ||
            (type == "Black & White" && (dummyColor == "Black"));
 }
+
+void JokerCard::changeShape(const std::string& newShape)
+{
+}
+void JokerCard::changeColor(const std::string& newColor)
+{
+}
+
+void JokerCard::change7(const std::shared_ptr<Card>& dummyCard)
+{
+}

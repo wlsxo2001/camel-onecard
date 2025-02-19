@@ -58,3 +58,48 @@ bool NormalCard::useJQK() const
     // if ( value == "J" || value == "K" ) return true;
     // else return false;
 }
+
+void NormalCard::changeShape(const std::string& newShape)
+{
+    shape = newShape;
+}
+void NormalCard::changeColor(const std::string& newColor)
+{
+    color = newColor;
+}
+
+
+void NormalCard::change7(const std::shared_ptr<Card>& dummyCard)
+{
+    if (dummyCard->getValue() != "7") return;  // 7이 아니면 실행 X
+
+    int choice;
+    std::cout << "변경할 shape을 선택하세요 (0: 유지 , 1: ♠, 2: ♦, 3: ♣, 4: ♥) : ";
+    std::cin >> choice;
+
+    switch (choice)
+    {
+    case 0:
+        return;  // 변경 없이 종료
+    case 1:
+        dummyCard->changeShape("♠");
+        dummyCard->changeColor("Black");
+        break;
+    case 2:
+        dummyCard->changeShape("♦");
+        dummyCard->changeColor("Red");
+        break;
+    case 3:
+        dummyCard->changeShape("♣");
+        dummyCard->changeColor("Black");
+        break;
+    case 4:
+        dummyCard->changeShape("♥");
+        dummyCard->changeColor("Red");
+        break;
+    default:
+        std::cout << "잘못된 입력입니다. 변경을 취소합니다." << std::endl;
+        return;
+    }
+    std::cout << "카드가 " << dummyCard->getShape() << " (" << dummyCard->getColor() << ") 로 변경되었습니다." << std::endl;
+}

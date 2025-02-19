@@ -2,6 +2,9 @@
 
 Game::Game()
 {
+    std::cout << "게임 시작!" << std::endl;
+    std::this_thread::sleep_for(std::chrono::seconds(1));
+
     players.push_back(std::make_shared<Player>("player1"));
     players.push_back(std::make_shared<Player>("player2"));
 
@@ -14,13 +17,20 @@ Game::Game()
         player->showHand();
     }
     dummyCard = deck.draw();
+    do
+    {
+        if (dummyCard->getAttackPower() > 0)
+        {
+            std::cout << "더미의 첫 카드가 공격카드이므로 다시 뽑습니다." << std::endl;
+            std::this_thread::sleep_for(std::chrono::seconds(1));
+            dummyCard = deck.draw();
+        }
+    }while (dummyCard->getAttackPower() != 0);
 }
+
 
 void Game::start()
 {
-    std::cout << "게임 시작!" << std::endl;
-    std::this_thread::sleep_for(std::chrono::seconds(1));
-
     size_t currentPlayerIndex = 0;
     int attackStack = 0;
 
@@ -49,6 +59,11 @@ void Game::start()
                 for (int i = 0; i < attackStack; i++)
                 {
                     auto drawnCard = deck.draw();
+                    if (!drawnCard) // nullptr이면 덱이 비어있는 상태
+                    {
+                        currentPlayer->checkGameOver(currentPlayer, players, currentPlayerIndex, deck);
+                        return; // 게임 종료
+                    }
                     currentPlayer->drawCard(drawnCard);
                     std::cout << currentPlayer->getName() << "가 덱에서 " << drawnCard->getFullInfo() << "를 뽑았습니다." << std::endl;
                 }
@@ -88,6 +103,11 @@ void Game::start()
                     for (int i = 0; i < attackStack; i++)
                     {
                         auto drawnCard = deck.draw();
+                        if (!drawnCard) // nullptr이면 덱이 비어있는 상태
+                        {
+                            currentPlayer->checkGameOver(currentPlayer, players, currentPlayerIndex, deck);
+                            return; // 게임 종료
+                        }
                         currentPlayer->drawCard(drawnCard);
                         std::cout << currentPlayer->getName() << "가 덱에서 " << drawnCard->getFullInfo() << "를 뽑았습니다." << std::endl;
                     }
@@ -111,15 +131,20 @@ void Game::start()
                 {
                     if (currentPlayer->canPlayCard(card, dummyCard, cnt == 0))
                     {
+                        // if (card->getAttackPower()>0)
+                        // {
+                        //     attackStack += card->getAttackPower();
+                        // }
                         std::cout << currentPlayer->getName() << "가 " << card->getFullInfo() << "를 냈습니다." << std::endl;
                         std::this_thread::sleep_for(std::chrono::seconds(1));
                         cnt++;
                         dummyCard = card;
+                        card->change7(dummyCard); // 7 이면 shape 변경 가능
                         played = true;
                         currentPlayer->playCard(card);
                         currentPlayer->showHand();
                         if (currentPlayer->checkGameOver(currentPlayer, players, currentPlayerIndex, deck)) return;
-                        if (card->useJQK()) // repeat 1 turn if J,K
+                        if (card->useJQK()) // repeat 1 turn if J,K  ff
                         {
                             std::cout << currentPlayer->getName() << "가 " << card->getValue() << "를 냈으므로 한턴 더 플레이 합니다." << std::endl;
                             JQKcnt++;
@@ -134,6 +159,11 @@ void Game::start()
             if (cnt == 0)
             {
                 auto drawnCard = deck.draw();
+                if (!drawnCard) // nullptr이면 덱이 비어있는 상태
+                {
+                    currentPlayer->checkGameOver(currentPlayer, players, currentPlayerIndex, deck);
+                    return; // 게임 종료
+                }
                 currentPlayer->drawCard(drawnCard);
                 std::cout << currentPlayer->getName() << "가 낼 카드가 없어 한 장을 뽑습니다." << std::endl;
                 std::this_thread::sleep_for(std::chrono::seconds(1));
@@ -148,4 +178,5 @@ void Game::start()
         currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
         std::this_thread::sleep_for(std::chrono::seconds(1));
     }
+
 }
