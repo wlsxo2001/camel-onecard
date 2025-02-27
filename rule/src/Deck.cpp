@@ -2,6 +2,7 @@
 
 Deck::Deck()
 {
+
     std::string shapes[] = {"♠", "♦", "♣", "♥"};
     std::string values[] = {"A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"};
 
@@ -34,12 +35,31 @@ std::shared_ptr<Card> Deck::draw()
 {
     if (cards.empty())
     {
-        //std::cout << "덱의 모든 카드가 소진되었습니다!" << std::endl;
-        return nullptr;
+        emptyCnt=1;
+        std::cout << "덱의 모든 카드가 소진되었습니다!" << std::endl;
+        //return nullptr;
+        std::this_thread::sleep_for(std::chrono::seconds(1));
+        std::cout << "사용된 카드를 다시 섞어 덱을 재구성합니다..." << std::endl;
+        std::this_thread::sleep_for(std::chrono::seconds(1));
+        cards.insert(cards.end(), usedCard.begin(), usedCard.end());
+        //game->eraseUsedAttackCards();
+        usedCard.clear(); // usedCard 비우기
+        shuffle();
     }
+
     auto card = cards.back();
     cards.pop_back();
     return card;
+}
+
+bool Deck::deckShuffledCheck()
+{
+    if (emptyCnt==1)
+    {
+        emptyCnt=0;
+        return true;
+    }
+    return false;
 }
 
 bool Deck::isEmpty() const
@@ -50,4 +70,17 @@ bool Deck::isEmpty() const
 int Deck::getSize() const
 {
     return cards.size();
+}
+
+void Deck::addUsedCard(std::shared_ptr<Card> playedCard)
+{
+    usedCard.push_back(playedCard);
+}
+
+void Deck::addDeck(std::vector<std::shared_ptr<Card>> loserCard)
+{
+    std::cout << "덱에 카드를 추가하고 다시 섞습니다.." << std::endl;
+    std::this_thread::sleep_for(std::chrono::seconds(1));
+    cards.insert(cards.end(), loserCard.begin(), loserCard.end());
+    shuffle();
 }

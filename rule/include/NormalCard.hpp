@@ -26,7 +26,7 @@ public:
     bool useJQK() const override;
     void changeShape(const std::string& newShape) override;
     void changeColor(const std::string& newColor) override;
-    void change7(const std::shared_ptr<Card>& dummyCard) override;
+    bool change7(const std::shared_ptr<Card>& dummyCard) override;
 };
 
 #endif //NORMALCARD_HPP

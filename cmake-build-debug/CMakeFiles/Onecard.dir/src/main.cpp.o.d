@@ -175,6 +175,7 @@ CMakeFiles/Onecard.dir/src/main.cpp.o: \
  /usr/include/c++/11/bits/this_thread_sleep.h /usr/include/c++/11/chrono \
  /usr/include/c++/11/ratio /usr/include/c++/11/limits \
  /usr/include/c++/11/ctime /usr/include/c++/11/bits/parse_numbers.h \
+ /usr/include/c++/11/sstream /usr/include/c++/11/bits/sstream.tcc \
  /home/jintae/CLionProjects/Onecard/src/../rule/include/Card.hpp \
  /home/jintae/CLionProjects/Onecard/src/../rule/include/Deck.hpp \
  /usr/include/c++/11/algorithm /usr/include/c++/11/bits/stl_algo.h \

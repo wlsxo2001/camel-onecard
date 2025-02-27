@@ -39,7 +39,8 @@ std::string JokerCard::getFullInfo() const
 
 int JokerCard::getAttackPower() const
 {
-    return (type == "Colored") ? 7 : (type == "Black & White") ? 5 : 0;
+    //return (type == "Colored") ? 7 : (type == "Black & White") ? 5 : 0;
+    return 4;
 }
 
 bool JokerCard::canPlayJoker(const std::string& dummyColor) const
@@ -55,6 +56,6 @@ void JokerCard::changeColor(const std::string& newColor)
 {
 }
 
-void JokerCard::change7(const std::shared_ptr<Card>& dummyCard)
+bool JokerCard::change7(const std::shared_ptr<Card>& dummyCard)
 {
 }

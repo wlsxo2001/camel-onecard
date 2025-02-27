@@ -22,6 +22,6 @@ void Card::changeColor(const std::string& newColor)
 {
 }
 
-void Card::change7(const std::shared_ptr<Card>& dummyCard)
+bool Card::change7(const std::shared_ptr<Card>& dummyCard)
 {
 }

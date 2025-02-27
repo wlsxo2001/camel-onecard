@@ -170,7 +170,8 @@ rule/CMakeFiles/rule.dir/src/Player.cpp.o: \
  /usr/include/c++/11/bits/atomic_lockfree_defines.h \
  /usr/include/c++/11/backward/auto_ptr.h \
  /usr/include/c++/11/pstl/glue_memory_defs.h \
- /usr/include/c++/11/pstl/execution_defs.h \
+ /usr/include/c++/11/pstl/execution_defs.h /usr/include/c++/11/sstream \
+ /usr/include/c++/11/bits/sstream.tcc \
  /home/jintae/CLionProjects/Onecard/rule/include/Card.hpp \
  /usr/include/c++/11/thread /usr/include/c++/11/bits/std_thread.h \
  /usr/include/c++/11/bits/this_thread_sleep.h /usr/include/c++/11/chrono \

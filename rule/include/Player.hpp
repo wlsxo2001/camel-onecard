@@ -8,17 +8,21 @@
 #include <iostream>
 #include <vector>
 #include <memory>
+#include <sstream>
 #include "Card.hpp"
 #include "Deck.hpp"
+
 
 class Player
 {
 protected:
     std::vector<std::shared_ptr<Card>> hand;
     std::string name;
+    bool loser = false;
+    bool winner = false;
+
 public:
     Player(std::string n);
-
     void drawCard(std::shared_ptr<Card> card);
     void showHand();
 
@@ -26,7 +30,7 @@ public:
     int getHandSize();
     std::vector<std::shared_ptr<Card>> getHand() const;
 
-    void playCard(std::shared_ptr<Card> playedCard);
+    void playCard(std::shared_ptr<Card> playedCard,Deck& deck);
 
     bool hasBothJokers();
     bool hasMore15();
@@ -34,6 +38,9 @@ public:
 
     bool canPlayCard(const std::shared_ptr<Card>& card, const std::shared_ptr<Card>& dummyCard, bool isFirstCard);
     bool checkGameOver(std::shared_ptr<Player> currentPlayer, std::vector<std::shared_ptr<Player>>& players, int currentPlayerIndex, Deck& deck);
+    std::shared_ptr<Card> counterCard(std::shared_ptr<Card>& dummyCard );
+    std::shared_ptr<Card> optimalCard(std::shared_ptr<Card>& dummyCard , int cnt);
+    int checkLoseWin();
 };
 
 #endif // PLAYER_HPP
