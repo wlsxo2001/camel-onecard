@@ -38,9 +38,10 @@ public:
 
     bool canPlayCard(const std::shared_ptr<Card>& card, const std::shared_ptr<Card>& dummyCard, bool isFirstCard);
     bool checkGameOver(std::shared_ptr<Player> currentPlayer, std::vector<std::shared_ptr<Player>>& players, int currentPlayerIndex, Deck& deck);
+    int checkLoseWin();
     std::shared_ptr<Card> counterCard(std::shared_ptr<Card>& dummyCard );
     std::shared_ptr<Card> optimalCard(std::shared_ptr<Card>& dummyCard , int cnt);
-    int checkLoseWin();
+    bool card7change(const std::shared_ptr<Card>& dummyCard);
 };
 
 #endif // PLAYER_HPP

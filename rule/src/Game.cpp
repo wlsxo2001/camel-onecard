@@ -50,14 +50,17 @@ Game::Game()
         }
         player->showHand();
     }
+
+    //시작 dummyCard 초기화
     dummyCard = deck.draw();
     deck.addUsedCard(dummyCard);
     do
     {
         if (dummyCard->getAttackPower() > 0)
         {
-            std::cout << "현재 더미 카드: " << std::endl;
+            std::cout << "현재 더미 카드: ";
             dummyCard->display();
+            std::cout << std::endl;
             std::cout << "더미의 첫 카드가 공격카드이므로 다시 뽑습니다." << std::endl;
             std::this_thread::sleep_for(std::chrono::seconds(1));
             dummyCard = deck.draw();
@@ -100,6 +103,7 @@ void Game::printRanking()
     std::cout << "========================" << std::endl;
 }
 
+// deck이 소진되어 다시 섞을 때 필요
 void Game::eraseUsedAttackCards()
 {
     if (deck.deckShuffledCheck())
@@ -109,15 +113,14 @@ void Game::eraseUsedAttackCards()
 }
 
 
-//진태,찬우,가성,지희,민성
+//진태,찬우,가성,지희,민성,태건,혜연
 void Game::start()
 {
     size_t currentPlayerIndex = 0;
     int attackStack = 0;
 
-    while (true)
+    while (true) // 게임이 종료될 때까지 계속 턴 반복
     {
-
         std::cout << "================================" << std::endl;
         std::cout << "현재 더미 카드: ";
         dummyCard->display();
@@ -178,8 +181,8 @@ void Game::start()
                     std::this_thread::sleep_for(std::chrono::seconds(1));
                     currentPlayer->showHand();
                     if ( card->getValue() == "3" ) attackStack = 0; // else make higher attackStack
-                    dummyCard->display();
-                    std::cout << std::endl;
+                    //dummyCard->display();
+                    //std::cout << std::endl;
                 }
 
                 // 대응 실패 시 카드 뽑기
@@ -212,7 +215,8 @@ void Game::start()
             Jcnt = 0;
             do {
                 played = false;
-                // 어떤카드를 낼것인지
+                // 2) 평시(공격 받은게 아닐 때) 사용하는 함수
+                // 어떤카드를 낼것인지 (각 player가 최적의 return값을 design해야함.)
                 std::shared_ptr<Card> card = currentPlayer->optimalCard(dummyCard, cnt);
                 // //player에 따라 다른 최적화 함수를 사용하게되면 이런식으로 하면 될듯
                 // //각자가 만든 최적화 함수를 사용하도록
@@ -238,21 +242,54 @@ void Game::start()
                     std::this_thread::sleep_for(std::chrono::seconds(1));
                     cnt++;
                     dummyCard = card;
-                    //// 7 카드 사람이 직접 모양 바꾸기
+
+                    // 낸 card가 7 일 경우
+                    // 7 카드 사람이 직접 모양 바꾸기 (사용X)
                     //if ( card->getValue() == "7") currentPlayer->showHand(); //바꾸기전 편의성을 위해서
                     // if ( card->change7(dummyCard))
                     // {
                     //     change7cnt++;// 바꿨으면 count 후 턴 종료
                     // }
                     //// currentPlayer에 따라서 다른 알고리즘의 함수로 7 카드 shape변경 해도됨
+
+
+                    // 3) 7번 카드가 나왔을 때 처리 함수
+                    // 각자의 함수에서 알고리즘으로 shape 변경하는 경우
+                    if (card->getValue() == "7")
+                    {
+                        currentPlayer->showHand();
+                        if ( currentPlayer->card7change(dummyCard) == true )
+                        {
+                            change7cnt++;// 바꿨으면 count 후 턴 종료
+                            std::cout << "카드의 모양이 " << dummyCard->getShape() << "로 변경되었습니다." << std::endl;
+                        }
+                        else
+                        {
+                            std::cout << "카드의 모양을 변경하지 않습니다." << std::endl;
+                        }
+                    }
+
+                    // 여러명이서 할 때 ( name에 따라 다른함수 실행 )
+                    // if (currentPlayer->getName()=="진태" && currentPlayer->card7change(dummyCard))
+                    // {
+                    //     change7cnt++;// 바꿨으면 count 후 턴 종료
+                    //     std::cout << "카드의 모양이 " << dummyCard->getShape() << "로 변경되었습니다." << std::endl;
+                    // }
+                    // else if (currentPlayer->getName()=="찬우" && currentPlayer->7shapeSwitch(dummyCard))
+                    // {
+                    //     change7cnt++;// 바꿨으면 count 후 턴 종료
+                    //     std::cout << "카드의 모양이 " << dummyCard->getShape() << "로 변경되었습니다." << std::endl;
+                    // }
+
                     played = true;
-                    currentPlayer->playCard(card,deck);
+                    currentPlayer->playCard(card, deck);
                     currentPlayer->showHand();
                     // JQK 기능 처리
                     if (card->useJQK())
                     {
                         if (card->getValue()=="K")
                         {
+                            if ((currentPlayer->getHand()).empty()) break; // 마지막 카드로 K를 사용했을 때 처리
                             std::cout << currentPlayer->getName() << " is " << card->getValue() << "를 냈으므로 한턴 더 플레이 합니다." << std::endl;
                             std::this_thread::sleep_for(std::chrono::seconds(1));
                             Kcnt++;
@@ -271,7 +308,7 @@ void Game::start()
                         }
                     }
                 }
-                if (Kcnt > 0 || change7cnt > 0) break;
+                if (Kcnt > 0 || change7cnt > 0) break; // 7 card shape을 변경했다면 턴 종료해야함.
             } while (played);
             if (Kcnt > 0) continue; // one more turn
             // 카드가 없으면 한 장 뽑기
@@ -310,11 +347,11 @@ void Game::start()
             }
         }
 
-        //진태,찬우,가성,지희,민성
+        //진태,찬우,가성,지희,민성,태건,혜연
         //턴 넘기기(J,Q case 포함)
         bool isReversed = false;
         if ( Jcnt > 0 ) currentPlayerIndex = (currentPlayerIndex + Jcnt * 2 ) % players.size();
-        else if ( Qcnt > 0 ) //진태,찬우,가성,지희,민성
+        else if ( Qcnt > 0 )
         {
             // Qcnt가 홀수일 때만 reverse 수행
             if (Qcnt % 2 == 1)

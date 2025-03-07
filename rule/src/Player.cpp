@@ -3,11 +3,13 @@
 
 Player::Player(std::string n) : name(n) {}
 
+//draw한 card를 hand에 저장
 void Player::drawCard(std::shared_ptr<Card> card)
 {
     hand.push_back(card);
 }
 
+//hand에 있는 모든 card 출력
 void Player::showHand()
 {
     std::cout << name << "'s Hand (" << hand.size() << " cards): ";
@@ -19,23 +21,27 @@ void Player::showHand()
     std::cout << std::endl;
 }
 
+//현재 player의 이름 반환
 std::string Player::getName()
 {
     return name;
 }
 
+//현재 player의 hand에 card 수 반환
 int Player::getHandSize()
 {
     //if (hand.size() == 1) std::cout << getName() << ": 원카드!" << std::endl;
     return hand.size();
 }
 
+//hand에 있는 모든 card 값 반환
 std::vector<std::shared_ptr<Card>> Player::getHand() const
 {
     return hand;
 }
 
-void Player::playCard(std::shared_ptr<Card> playedCard, Deck& deck) //사용했던 카드를 usedCard에 추가하고 hand에서 제거
+//사용한 카드를 usedCard에 추가하고 hand에서 제거
+void Player::playCard(std::shared_ptr<Card> playedCard, Deck& deck)
 {
     auto it = std::find(hand.begin(), hand.end(), playedCard);
     deck.addUsedCard(playedCard);
@@ -45,6 +51,7 @@ void Player::playCard(std::shared_ptr<Card> playedCard, Deck& deck) //사용했�
     }
 }
 
+//Joker카드 2장 보유 여부
 bool Player::hasBothJokers()
 {
     bool hasColored = false, hasBlackWhite = false;
@@ -56,19 +63,22 @@ bool Player::hasBothJokers()
     return hasColored && hasBlackWhite;
 }
 
+//보유 카드 수 초과 여부 (현재는 10장으로 설정)
 bool Player::hasMore15()
 {
     return hand.size() >= 10;
 }
 
+//hand의 카드 소진 여부
 bool Player::hasNoCards()
 {
     return hand.empty();
 }
 
+//hand의 card와 dummyCard를 비교하여 낼 수 있는 상황인지 판단(true/false)
 bool Player::canPlayCard(const std::shared_ptr<Card>& card, const std::shared_ptr<Card>& dummyCard, bool isFirstCard)
 {
-    if (!isFirstCard) // 턴 의처음에 는 shape, value 둘 중 하나만 같으면 됨. or canPlayJoker이거나
+    if (!isFirstCard) // 턴의 처음에는 shape, value 둘 중 하나만 같으면 됨. or canPlayJoker이거나
     {
         if (dummyCard->getType() == "Normal")
         {
@@ -80,13 +90,13 @@ bool Player::canPlayCard(const std::shared_ptr<Card>& card, const std::shared_pt
             return (card->getColor()=="Red" && dummyCard->getColor()=="Colored") || (card->getColor()=="Black" && dummyCard->getColor()=="Black & White");
         }
     }
-    else // 두번째 이후의 턴에서는 value 가 같은 경우에만 가능
+    else // 같은 턴의 두번째 카드부터는 value 가 같은 경우에만 제출 가능
     {
         return card->getValue() == dummyCard->getValue();
     }
 }
 
-
+//player의 승리/탈락 조건 확인
 bool Player::checkGameOver(std::shared_ptr<Player> currentPlayer, std::vector<std::shared_ptr<Player>>& players, int currentPlayerIndex, Deck& deck)
 {
 
@@ -128,14 +138,31 @@ bool Player::checkGameOver(std::shared_ptr<Player> currentPlayer, std::vector<st
     return false;
 }
 
+// 승리자(2)/탈락자(1)/둘다아닌자(0) 구분
+int Player::checkLoseWin()
+{
+    if (loser) return 1;
+    else if (winner) return 2;
+    return 0;
+}
 
+// 여기부터는 각자가 원하는 이름의 함수를 만들어야함 (구분이 용이하게 각자의 이름을 포함하는 것을 권함)
+// 기본적으로 함수의 매개변수로는 dummyCard를 가져옴.
+// 그러나 원한다면 상대 player가 지금까지 제출한 카드들에 대한 정보는 따로 함수를 또 만들어 저장해서 사용하여도됨.
+// 엄중경고) 상대 player의 hand나 deck의 카드 등 open된 적이 없는 카드를 참조하는 함수를 사용해선 안됨.(부정행위임. cheating)
+
+// 기본적으로 함수를 3가지 만들어야함
+// 각 함수를 선언하는 곳은 Game 클래스에 주석으로 각각 설명되어있음.
+
+// 1) 공격 받았을 때 사용하는 함수
 // 방어 및 반격 가능 여부 확인 후 카드 제출 (각 player가 최적의 return값을 design해야함.)
-
 std::shared_ptr<Card> Player::counterCard(std::shared_ptr<Card>& dummyCard )
 {
     for (const auto& card : this->getHand())
     {
-        if (card->canDefend(card, dummyCard)) // canDefend by Defense card or Attack card
+        if (card->canDefend(card, dummyCard))
+        // canDefend를 굳이 한번 더 체크하지않아도됨. Game 클래스에서 한번 더 확인함.
+        // but Game 클래스에서 canDefend가 만족되지않으면 바로 대응 실패로 간주됨.
         {
             return card;
         }
@@ -144,12 +171,15 @@ std::shared_ptr<Card> Player::counterCard(std::shared_ptr<Card>& dummyCard )
 }
 
 
+// 2) 평시(공격 받은게 아닐 때) 사용하는 함수
 // 어떤카드를 낼것인지 (각 player가 최적의 return값을 design해야함.)
 std::shared_ptr<Card> Player::optimalCard(std::shared_ptr<Card>& dummyCard , int cnt) // cnt는 턴 내에서 첫번째로 내는 카드인지 구분하기 위함.
 {
     for (const auto& card : this->getHand())
     {
         if (this->canPlayCard(card, dummyCard, cnt))
+        // canPlayCard를 굳이 한번 더 체크하지않아도됨. Game 클래스에서 한번 더 확인함.
+        // but Game 클래스에서 canPlayCard가 만족되지않으면 낼 카드가 없다고 간주됨.
         {
             return card;
         }
@@ -158,9 +188,46 @@ std::shared_ptr<Card> Player::optimalCard(std::shared_ptr<Card>& dummyCard , int
 }
 
 
-int Player::checkLoseWin()
+// 3) 7번 카드가 나왔을 때 처리 함수
+// 일단은 hand내에서 최빈 shape으로 바꾸도록 해놨는데 뭔가 제대로 안됨
+// shape 변경 여부 확인을 위해서 (턴 계산에 필요) bool로 return
+bool Player::card7change(const std::shared_ptr<Card>& dummyCard)
 {
-    if (loser) return 1;
-    else if (winner) return 2;
-    return 0;
+    if (dummyCard->getValue() != "7") return false;  // 7이 아니면 실행 X
+
+    std::unordered_map<std::string, int> shapeCount;
+    //                      first   second
+    // 각 shape의 빈도수 계산
+    for (const auto& card : hand)
+    {
+        shapeCount[card->getShape()]++;
+    }
+
+    // 최빈 shape 찾기
+    std::string mostFrequentShape;
+    int maxCount = 0;
+
+    for (const auto& pair : shapeCount)
+    {
+        if (pair.second > maxCount)
+        {
+            maxCount = pair.second;
+            mostFrequentShape = pair.first;
+        }
+    }
+
+    if ( mostFrequentShape == dummyCard->getShape() )
+    {
+        //std::cout << "카드의 모양을 변경하지 않습니다." << std::endl; //탬플릿 통일을 위해서 Game class에서 실행됨
+        return false;
+    }
+
+    // 최빈 shape로 변경
+    if (!mostFrequentShape.empty())
+    {
+        dummyCard->changeShape(mostFrequentShape);
+        //std::cout << "카드의 모양이 " << mostFrequentShape << "로 변경되었습니다." << std::endl; //탬플릿 통일을 위해서 Game class에서 실행됨
+        return true;
+    }
+    return false;
 }
