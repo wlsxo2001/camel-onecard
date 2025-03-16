@@ -1,5 +1,7 @@
 #include "Deck.hpp"
 
+#include <Game.hpp>
+
 Deck::Deck()
 {
     std::string shapes[] = {"♠", "♦", "♣", "♥"};
@@ -25,10 +27,16 @@ void Deck::shuffle()
 {
     std::cout << "카드 섞는중 ..." << std::endl;
     srand(time(0));
-    std::this_thread::sleep_for(std::chrono::seconds(1));
+    if (timeOn)
+    {
+        std::this_thread::sleep_for(std::chrono::milliseconds(timeSleep));
+    }
     std::random_shuffle(cards.begin(), cards.end());
     std::cout << "deck 에 남은 카드 수: " << cards.size() << std::endl;
-    std::this_thread::sleep_for(std::chrono::seconds(1));
+    if (timeOn)
+    {
+        std::this_thread::sleep_for(std::chrono::milliseconds(timeSleep));
+    }
 }
 
 // deck에서 카드(1장)를 뽑는 함수
@@ -39,9 +47,15 @@ std::shared_ptr<Card> Deck::draw()
         emptyCnt=1;
         std::cout << "덱의 모든 카드가 소진되었습니다!" << std::endl;
         //return nullptr;
-        std::this_thread::sleep_for(std::chrono::seconds(1));
+        if (timeOn)
+        {
+            std::this_thread::sleep_for(std::chrono::milliseconds(timeSleep));
+        }
         std::cout << "사용된 카드를 다시 섞어 덱을 재구성합니다..." << std::endl;
-        std::this_thread::sleep_for(std::chrono::seconds(1));
+        if (timeOn)
+        {
+            std::this_thread::sleep_for(std::chrono::milliseconds(timeSleep));
+        }
         cards.insert(cards.end(), usedCard.begin(), usedCard.end());
         //game->eraseUsedAttackCards();
         usedCard.clear(); // usedCard 비우기
@@ -86,7 +100,10 @@ void Deck::addUsedCard(std::shared_ptr<Card> playedCard)
 void Deck::addDeck(std::vector<std::shared_ptr<Card>> loserCard)
 {
     std::cout << "덱에 카드를 추가하고 다시 섞습니다.." << std::endl;
-    std::this_thread::sleep_for(std::chrono::seconds(1));
+    if (timeOn)
+    {
+        std::this_thread::sleep_for(std::chrono::milliseconds(timeSleep));
+    }
     cards.insert(cards.end(), loserCard.begin(), loserCard.end());
     shuffle();
 }

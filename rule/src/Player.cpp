@@ -170,6 +170,20 @@ std::shared_ptr<Card> Player::counterCard(std::shared_ptr<Card>& dummyCard )
     return nullptr;
 }
 
+std::shared_ptr<Card> Player::counterCardGaseong(std::shared_ptr<Card>& dummyCard )
+{
+    for (const auto& card : this->getHand())
+    {
+        if (card->canDefend(card, dummyCard))
+            // canDefend를 굳이 한번 더 체크하지않아도됨. Game 클래스에서 한번 더 확인함.
+                // but Game 클래스에서 canDefend가 만족되지않으면 바로 대응 실패로 간주됨.
+        {
+            return card;
+        }
+    }
+    return nullptr;
+}
+
 
 // 2) 평시(공격 받은게 아닐 때) 사용하는 함수
 // 어떤카드를 낼것인지 (각 player가 최적의 return값을 design해야함.)
@@ -187,6 +201,109 @@ std::shared_ptr<Card> Player::optimalCard(std::shared_ptr<Card>& dummyCard , int
     return nullptr;
 }
 
+// number : string으로 들어오고 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, J, Q, K
+// shape :
+
+// std::string shapes[] = {"♠", "♦", "♣", "♥"};
+// std::string values[] = {"A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"};
+
+// int shapeCount[] = {0, 0, 0, 0}
+
+std::shared_ptr<Card> Player::optimalCardGaseong(std::shared_ptr<Card>& dummyCard , int cnt) // cnt는 턴 내에서 첫번째로 내는 카드인지 구분하기 위함.
+{
+
+
+    // std::vector<std::shared_ptr<Card>> playableNormalCard;
+    // std::string shapes[] = {"♠", "♦", "♣", "♥"};
+    // std::string values[] = {"A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"};
+    //
+    // for (const auto& card : this->getHand())
+    // {
+    //     if (this->canPlayCard(card, dummyCard, cnt))
+    //     {
+    //         if (card -> getType() == "Joker")
+    //         {
+    //             return card;
+    //         }
+    //         else
+    //         {
+    //             playableNormalCard.push_back(card);
+    //         }
+    //     }
+    // }
+    // int shapeCount[4];
+    // int numberCount[13];
+    //
+    // for (auto& card : playableNormalCard)
+    // {
+    //     if (card->getShape() == "♠") { shapeCount[0]++; }
+    //     else if(card->getShape() == "♦") { shapeCount[1]++; }
+    //     else if(card->getShape() == "♣") { shapeCount[2]++; }
+    //     else if(card->getShape() == "♥") { shapeCount[3]++; }
+    //
+    //     if (card->getValue() == "A") { numberCount[0]++; }
+    //     else if(card->getValue() == "2") { numberCount[1]++; }
+    //     else if(card->getValue() == "3") { numberCount[2]++; }
+    //     else if(card->getValue() == "4") { numberCount[3]++; }
+    //     else if(card->getValue() == "5") { numberCount[4]++; }
+    //     else if(card->getValue() == "6") { numberCount[5]++; }
+    //     else if(card->getValue() == "7") { numberCount[6]++; }
+    //     else if(card->getValue() == "8") { numberCount[7]++; }
+    //     else if(card->getValue() == "9") { numberCount[8]++; }
+    //     else if(card->getValue() == "10") { numberCount[9]++; }
+    //     else if(card->getValue() == "J") { numberCount[10]++; }
+    //     else if(card->getValue() == "Q") { numberCount[11]++; }
+    //     else if(card->getValue() == "K") { numberCount[12]++; }
+    // }
+    //
+    // int maxShape=0;
+    // int maxShapeIdx=0;
+    //
+    // int maxNumber=0;
+    // int maxNumberIdx=0;
+    //
+    // for (int i=0; i<4; i++)
+    // {
+    //     if (shapeCount[i] > maxShape)
+    //     {
+    //         maxShape = shapeCount[i];
+    //         maxShapeIdx = i;
+    //     }
+    // }
+    //
+    // for (int i=0; i<13; i++)
+    // {
+    //     if (numberCount[i] > maxShape)
+    //     {
+    //         maxShape = numberCount[i];
+    //         maxNumberIdx = i;
+    //     }
+    // }
+    //
+    //
+    // if (maxShape > maxNumber)
+    // {
+    //     for (auto& card : playableNormalCard)
+    //     {
+    //         if (card ->getShape() == shapes[maxShapeIdx])
+    //         {
+    //             return card;
+    //         }
+    //     }
+    // }
+    // else
+    // {
+    //     for (auto& card : playableNormalCard)
+    //     {
+    //         if (card ->getValue() == shapes[maxNumberIdx])
+    //         {
+    //             return card;
+    //         }
+    //     }
+    // }
+
+    return nullptr;
+}
 
 // 3) 7번 카드가 나왔을 때 처리 함수
 // 일단은 hand내에서 최빈 shape으로 바꾸도록 해놨는데 뭔가 제대로 안됨

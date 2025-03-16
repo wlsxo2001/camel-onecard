@@ -41,6 +41,10 @@ public:
     int checkLoseWin();
     std::shared_ptr<Card> counterCard(std::shared_ptr<Card>& dummyCard );
     std::shared_ptr<Card> optimalCard(std::shared_ptr<Card>& dummyCard , int cnt);
+
+    std::shared_ptr<Card> counterCardGaseong(std::shared_ptr<Card>& dummyCard );
+    std::shared_ptr<Card> optimalCardGaseong(std::shared_ptr<Card>& dummyCard , int cnt);
+
     bool card7change(const std::shared_ptr<Card>& dummyCard);
 };
 

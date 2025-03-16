@@ -15,6 +15,8 @@
 #include "Deck.hpp"
 #include "Player.hpp"
 
+constexpr bool timeOn = false;
+constexpr int timeSleep = 10;
 
 class Game
 {

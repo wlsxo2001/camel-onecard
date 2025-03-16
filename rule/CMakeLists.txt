@@ -5,6 +5,12 @@ add_library(rule
         src/Player.cpp
         src/JokerCard.cpp
         src/NormalCard.cpp
+        include/Game.hpp
+        include/Card.hpp
+        include/Deck.hpp
+        include/Player.hpp
+        include/JokerCard.hpp
+        include/NormalCard.hpp
 )
 
 target_include_directories(rule
