@@ -388,7 +388,6 @@ std::string Game::start()
             }
         }
         //승리/탈락 조건 확인
-        std::string winner;
         if (currentPlayer->checkGameOver(currentPlayer, players, currentPlayerIndex, deck))
         {
             pushRanking(currentPlayer);
@@ -406,10 +405,8 @@ std::string Game::start()
                 std::cout << "=================================" << std::endl;
                 std::cout << "마지막 1명만 남았으므로 게임을 종료합니다." << std::endl;
                 std::cout << "=================================" << std::endl;
-                winner = printRanking();
                 break;
             }
-            return winner;
         }
 
         //진태,찬우,가성,지희,민성,태건,혜연

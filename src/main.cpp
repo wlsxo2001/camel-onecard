@@ -2,7 +2,7 @@
 // Created by jintae on 25. 2. 12.
 //
 #include "../rule/include/Game.hpp"
-
+// 진태,찬우,가성,지희,민성,태건,혜연
 int main()
 {
     Game game;
