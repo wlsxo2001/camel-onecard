@@ -32,9 +32,9 @@ private:
 
 public:
     Game();
-    void start();
+    std::string start();
     void pushRanking(std::shared_ptr<Player>& currentPlayer);
-    void printRanking();
+    std::string printRanking();
     void eraseUsedAttackCards(); // deck을 다시 shuffle할 때 초기화 해줘야함.
 };
 

@@ -98,7 +98,7 @@ void Game::pushRanking(std::shared_ptr<Player>& currentPlayer)
 }
 
 // 최종 ranking 출력 함수
-void Game::printRanking()
+std::string Game::printRanking()
 {
     // losers에 남아 있는 플레이어가 있다면 ranking에 합치기
     if (!losers.empty())
@@ -116,6 +116,9 @@ void Game::printRanking()
     }
 
     std::cout << "========================" << std::endl;
+
+    return (ranking[0])->getName();
+    // return "가성";
 }
 
 // deck이 소진되어 다시 섞을 때 필요
@@ -129,7 +132,7 @@ void Game::eraseUsedAttackCards()
 
 
 //진태,찬우,가성,지희,민성,태건,혜연
-void Game::start()
+std::string Game::start()
 {
     size_t currentPlayerIndex = 0;
     int attackStack = 0;
@@ -385,6 +388,7 @@ void Game::start()
             }
         }
         //승리/탈락 조건 확인
+        std::string winner;
         if (currentPlayer->checkGameOver(currentPlayer, players, currentPlayerIndex, deck))
         {
             pushRanking(currentPlayer);
@@ -402,9 +406,10 @@ void Game::start()
                 std::cout << "=================================" << std::endl;
                 std::cout << "마지막 1명만 남았으므로 게임을 종료합니다." << std::endl;
                 std::cout << "=================================" << std::endl;
-                printRanking();
+                winner = printRanking();
                 break;
             }
+            return winner;
         }
 
         //진태,찬우,가성,지희,민성,태건,혜연

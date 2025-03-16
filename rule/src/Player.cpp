@@ -211,7 +211,48 @@ std::shared_ptr<Card> Player::optimalCard(std::shared_ptr<Card>& dummyCard , int
 
 std::shared_ptr<Card> Player::optimalCardGaseong(std::shared_ptr<Card>& dummyCard , int cnt) // cnt는 턴 내에서 첫번째로 내는 카드인지 구분하기 위함.
 {
+    std::vector<std::shared_ptr<Card>> playableNormalCard;
+    std::vector<std::shared_ptr<Card>> playableDefenceCard;
+    for (const auto& card : this->getHand())
+    {
+        if (this->canPlayCard(card, dummyCard, cnt))
+        {
+            if (card -> getType() == "Joker")
+            {
+                return card;
+            }
+            else if (card -> getValue() == "3")
+            {
+                playableDefenceCard.push_back(card);
+            }
+            else
+            {
+                playableNormalCard.push_back(card);
+            }
+        }
+    }
 
+    if (playableNormalCard.size() == 0 && playableDefenceCard.size() == 0)
+    {
+        return nullptr;
+    }
+    else
+    {
+        for (const auto& card : playableNormalCard)
+        {
+            return card;
+        }
+        for (const auto& card: playableDefenceCard)
+        {
+            return card;
+        }
+    }
+
+    //
+    // for (auto &card : playableNormalCard)
+    // {
+    //
+    // }
 
     // std::vector<std::shared_ptr<Card>> playableNormalCard;
     // std::string shapes[] = {"♠", "♦", "♣", "♥"};
