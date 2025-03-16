@@ -9,8 +9,8 @@ Game::Game()
     }
     std::string input;
     std::cout << "Player 이름을 ','로 구분하여 입력하세요: ";
-    std::getline(std::cin, input);
-
+    // std::getline(std::cin, input);
+    input = "진태,찬우,가성,지희,민성,태건,혜연";
     // 입력된 문자열을 ',' 기준으로 파싱
     std::stringstream ss(input);
     std::string playerName;
@@ -405,6 +405,7 @@ std::string Game::start()
                 std::cout << "=================================" << std::endl;
                 std::cout << "마지막 1명만 남았으므로 게임을 종료합니다." << std::endl;
                 std::cout << "=================================" << std::endl;
+                return printRanking();
                 break;
             }
         }

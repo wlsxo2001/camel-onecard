@@ -5,29 +5,30 @@
 // 진태,찬우,가성,지희,민성,태건,혜연
 int main()
 {
-    Game game;
-    std::string winner;
+
+
     int win_count[7] = {0};
     int count = 0;
-    for (int i=0; i<1; i++)
+    for (int i=0; i<1000; i++)
     {
-        winner = game.start();
+        Game game;
+        std::string winner = game.start();
         count++;
         if (winner == "가성") {win_count[0]++;}
         if (winner == "진태") {win_count[1]++;}
         if (winner == "찬우") {win_count[2]++;}
         if (winner == "태건") {win_count[3]++;}
-        if (winner == "헤연") {win_count[4]++;}
+        if (winner == "혜연") {win_count[4]++;}
         if (winner == "지희") {win_count[5]++;}
         if (winner == "민성") {win_count[6]++;}
     }
     std::cout << count << std::endl;
-    std::cout << "가성" << " " << "진태" << " " << "찬우" << " " << "태건" << " " << "헤연" << " " << "지희" << " " << "민성" << " ";
+    std::cout << "가성" << " " << "진태" << " " << "찬우" << " " << "태건" << " " << "혜연" << " " << "지희" << " " << "민성" << " ";
     std::cout << std::endl;
 
     for (int i=0; i<7; i++)
     {
-        std::cout << win_count[i] << " ";
+        std::cout << win_count[i] << "   ";
     }
 
     return 0;
