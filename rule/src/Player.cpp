@@ -184,6 +184,35 @@ std::shared_ptr<Card> Player::counterCardGaseong(std::shared_ptr<Card>& dummyCar
     return nullptr;
 }
 
+std::shared_ptr<Card> Player::KMScounterCard(std::shared_ptr<Card>& dummyCard)
+{
+    std::shared_ptr<Card> bestCard = nullptr;
+    int minAttack = 1000;
+    for (const auto& card : this->getHand())
+    {
+        if (card->canDefend(card, dummyCard))
+        {
+            int attackPower = card->getAttackPower();
+            if (attackPower < minAttack)
+            {
+                bestCard = card;
+                minAttack = attackPower;
+            }
+        }
+    }
+    if (!bestCard)
+    {
+        for (const auto& card : this->getHand())
+        {
+            if (card->getType() == "Joker")
+            {
+                return card;
+            }
+        }
+    }
+    return bestCard;
+}
+
 
 // 2) 평시(공격 받은게 아닐 때) 사용하는 함수
 // 어떤카드를 낼것인지 (각 player가 최적의 return값을 design해야함.)
@@ -343,6 +372,91 @@ std::shared_ptr<Card> Player::optimalCardGaseong(std::shared_ptr<Card>& dummyCar
     //     }
     // }
 
+    return nullptr;
+}
+
+std::shared_ptr<Card> Player::KMSoptimalCard(std::shared_ptr<Card>& dummyCard, int cnt)
+{
+    std::shared_ptr<Card> bestCard = nullptr;
+    std::unordered_map<std::string, int> shapeCount;
+    std::unordered_map<std::string, int> valueCount;
+    for (const auto& card : this->getHand())
+    {
+        shapeCount[card->getShape()]++;
+        valueCount[card->getValue()]++;
+    }
+    for (const auto& card : this->getHand())
+    {
+        if (this->canPlayCard(card, dummyCard, cnt))
+        {
+            if (card->getAttackPower() > 0)
+            {
+                return card;
+            }
+        }
+    }
+    std::string bestValue;
+    int maxValueCount = 0;
+    for (const auto& [value, count] : valueCount)
+    {
+        if (count > maxValueCount)
+        {
+            maxValueCount = count;
+            bestValue = value;
+        }
+    }
+    for (const auto& card : this->getHand())
+    {
+        if (this->canPlayCard(card, dummyCard, cnt))
+        {
+            if (card->getValue() == bestValue)
+            {
+                return card;
+            }
+        }
+    }
+    std::string bestShape;
+    int maxShapeCount = 0;
+    for (const auto& [shape, count] : shapeCount)
+    {
+        if (count > maxShapeCount)
+        {
+            maxShapeCount = count;
+            bestShape = shape;
+        }
+    }
+    for (const auto& card : this->getHand())
+    {
+        if (this->canPlayCard(card, dummyCard, cnt))
+        {
+            if (card->getShape() == bestShape)
+            {
+                return card;
+            }
+        }
+    }
+    return nullptr;
+}
+
+std::shared_ptr<Card> Player::optimalCardCw(std::shared_ptr<Card>& dummyCard , int cnt) // cnt는 턴 내에서 첫번째로 내는 카드인지 구분하기 위함.
+{
+
+    std::unordered_map<std::string, int> customOrder = {
+        {"J", 1}, {"Colored", 2}, {"Black & White", 3}, {"7", 4}, {"2", 5}, {"4", 6}, {"5", 7},
+        {"6", 8}, {"8", 9}, {"9", 10}, {"10", 11}, {"Q", 12}, {"K", 13},
+        {"A", 14}, {"3", 15}
+    };
+
+    std::sort(hand.begin(), hand.end(), [&](const std::shared_ptr<Card>& a, const std::shared_ptr<Card>& b)
+    {
+        return customOrder[a->getValue()] < customOrder[b->getValue()];
+    });
+
+    for (const auto& card : this->getHand())
+    {
+        if (this->canPlayCard(card, dummyCard, cnt))
+            return card;
+    }
     return nullptr;
 }
 

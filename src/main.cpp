@@ -2,6 +2,7 @@
 // Created by jintae on 25. 2. 12.
 //
 #include "../rule/include/Game.hpp"
+#include <iomanip>
 // 진태,찬우,가성,지희,민성,태건,혜연
 int main()
 {
@@ -9,7 +10,7 @@ int main()
 
     int win_count[7] = {0};
     int count = 0;
-    for (int i=0; i<1000; i++)
+    for (int i=0; i<10000; i++)
     {
         Game game;
         std::string winner = game.start();
@@ -23,12 +24,12 @@ int main()
         if (winner == "민성") {win_count[6]++;}
     }
     std::cout << count << std::endl;
-    std::cout << "가성" << " " << "진태" << " " << "찬우" << " " << "태건" << " " << "혜연" << " " << "지희" << " " << "민성" << " ";
+    std::cout << std::setw(10) << "Gaseong" << std::setw(10) << "Jinate" << std::setw(10)  << "Chanwoo" << std::setw(10)  << "Taegun" << std::setw(10)  << "Hyeyeon" << std::setw(10)  << "jihee" << std::setw(10)  << "Minseong";
     std::cout << std::endl;
 
     for (int i=0; i<7; i++)
     {
-        std::cout << win_count[i] << "   ";
+        std::cout << std::setw(10)  << win_count[i];
     }
 
     return 0;

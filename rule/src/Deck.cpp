@@ -1,6 +1,7 @@
 #include "Deck.hpp"
 
 #include <Game.hpp>
+#include <random>
 
 Deck::Deck()
 {
@@ -31,7 +32,7 @@ void Deck::shuffle()
     {
         std::this_thread::sleep_for(std::chrono::milliseconds(timeSleep));
     }
-    std::random_shuffle(cards.begin(), cards.end());
+    std::shuffle(cards.begin(), cards.end(), std::mt19937(std::random_device()()));
     std::cout << "deck 에 남은 카드 수: " << cards.size() << std::endl;
     if (timeOn)
     {

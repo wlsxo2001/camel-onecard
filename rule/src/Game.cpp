@@ -1,5 +1,7 @@
 #include "Game.hpp"
 
+#include <random>
+
 Game::Game()
 {
     std::cout << "게임 시작!" << std::endl;
@@ -10,22 +12,32 @@ Game::Game()
     std::string input;
     std::cout << "Player 이름을 ','로 구분하여 입력하세요: ";
     // std::getline(std::cin, input);
-    input = "진태,찬우,가성,지희,민성,태건,혜연";
-    // 입력된 문자열을 ',' 기준으로 파싱
-    std::stringstream ss(input);
-    std::string playerName;
+    input = "가성,진태,찬우,태건,혜연,지희,민성";
 
-    while (std::getline(ss, playerName, ','))
+    std::random_device rd;
+    std::mt19937 g(rd());
+    std::vector<std::string> nameVector = {"가성", "진태", "찬우", "태건", "혜연", "지희", "민성"};
+    std::shuffle(nameVector.begin(),nameVector.end(), g);
+
+    for (auto &name : nameVector)
     {
-        // 공백 제거 (이름 앞뒤의 공백을 없애기)
-        playerName.erase(0, playerName.find_first_not_of(" \t\n\r"));
-        playerName.erase(playerName.find_last_not_of(" \t\n\r") + 1);
-
-        if (!playerName.empty())
-        {
-            players.push_back(std::make_shared<Player>(playerName));
-        }
+        players.push_back(std::make_shared<Player>(name));
     }
+    // 입력된 문자열을 ',' 기준으로 파싱
+    // std::stringstream ss(input);
+    // std::string playerName;
+    //
+    // while (std::getline(ss, playerName, ','))
+    // {
+    //     // 공백 제거 (이름 앞뒤의 공백을 없애기)
+    //     playerName.erase(0, playerName.find_first_not_of(" \t\n\r"));
+    //     playerName.erase(playerName.find_last_not_of(" \t\n\r") + 1);
+    //
+    //     if (!playerName.empty())
+    //     {
+    //         players.push_back(std::make_shared<Player>(playerName));
+    //     }
+    // }
 
     // 생성된 플레이어 출력
     std::cout << "\n생성된 플레이어 목록:\n";
@@ -189,14 +201,19 @@ std::string Game::start()
             else // 일반 공격카드 대응
             {
                 //방어 및 반격 가능 여부 확인 및 카드 제출
-                std::shared_ptr<Card> card = currentPlayer->counterCard(dummyCard); // 최적의 카드 선택(각자 player가 함수를 design)
+
+                std::shared_ptr<Card> card;
                 // //player에 따라 다른 최적화 함수를 사용하게되면 이런식으로 하면 될듯
                 // //각자가 만든 최적화 함수를 사용하도록
                 // //필요한 정보들(ex.상대방이 냈던 카드들)은 각자의 방식으로 함수의 매개변수로 끌어다쓰면됨.(cheating이 아닌 범주 안에서)
-                // if (currentPlayer->getName()=="진태")
-                // {
-                //     std::shared_ptr<Card> card = currentPlayer->counterCard(dummyCard);
-                // }
+                if (currentPlayer->getName()=="민성")
+                {
+                   card = currentPlayer->KMScounterCard(dummyCard);
+                }
+                else
+                {
+                    card = currentPlayer->counterCard(dummyCard); // 최적의 카드 선택(각자 player가 함수를 design)
+                }
                 // else if (currentPlayer->getName()=="찬우")
                 // {
                 //     std::shared_ptr<Card> card = currentPlayer->myCounter(dummyCard);
@@ -257,7 +274,16 @@ std::string Game::start()
                 if (currentPlayer->getName()=="가성")
                 {
                     //진태,찬우,가성,지희,민성,태건,혜연
-                    card = currentPlayer->optimalCardGaseong(dummyCard, cnt);
+                    // card = currentPlayer->optimalCard(dummyCard, cnt);
+                    card = currentPlayer->optimalCard(dummyCard, cnt);
+                }
+                else if (currentPlayer->getName()=="민성")
+                {
+                    card = currentPlayer -> KMSoptimalCard(dummyCard, cnt);
+                }
+                else if (currentPlayer->getName()=="찬우")
+                {
+                    card = currentPlayer -> optimalCardCw(dummyCard, cnt);
                 }
                 else
                 {
