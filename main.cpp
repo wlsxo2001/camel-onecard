@@ -31,7 +31,7 @@
 //public:
 //    NormalCard(std::string c, std::string s, std::string v) : color(c), shape(s), value(v) {}
 //    void display() const override {
-//        std::cout << color << " " << shape << " " << value;
+//        //std::cout << color << " " << shape << " " << value;
 //    }
 //    std::string getType() const override {
 //        return "Normal";
@@ -64,7 +64,7 @@
 //    JokerCard(std::string t) : type(t) {}
 //
 //    void display() const override {
-//        std::cout << type << " Joker";
+//        //std::cout << type << " Joker";
 //    }
 //
 //    std::string getType() const override { return "Joker"; }
@@ -107,22 +107,22 @@
 //        shuffle();
 //    }
 //    void shuffle() { // 카드 섞기
-//        std::cout << "카드 섞는중 ..." << std::endl;
+//        //std::cout << "카드 섞는중 ..." << std::endl;
 //        srand(time(0));
 //        std::random_shuffle(cards.begin(), cards.end());
-//        std::cout << "deck 에 남은 카드 수: " << cards.size() << std::endl;
+//        //std::cout << "deck 에 남은 카드 수: " << cards.size() << std::endl;
 //    }
 //    // 맨 위 카드 뽑고 덱에서 삭제
 //    std::shared_ptr<Card> draw() //std::shared_ptr<Player> currentPlayer, std::vector<std::shared_ptr<Player>>& players, int currentPlayerIndex, Deck& deck
 //    {
 //        if (cards.empty())
 //        {
-//            std::cout << "덱의 모든 카드가 소진되었습니다!" << std::endl;
+//            //std::cout << "덱의 모든 카드가 소진되었습니다!" << std::endl;
 //            return nullptr;
 //        }
 //        auto card = cards.back();
 //        cards.pop_back();
-//        //std::cout << "deck 에 남은 카드 수: " << cards.size() << std::endl;
+//        ////std::cout << "deck 에 남은 카드 수: " << cards.size() << std::endl;
 //        return card;
 //        // if (cards.empty()) {
 //        //     // 게임 종료 체크
@@ -154,12 +154,12 @@
 //        hand.push_back(card);
 //    }
 //    void showHand() {
-//        std::cout << name << "'s hand (" << hand.size() << " cards): ";
+//        //std::cout << name << "'s hand (" << hand.size() << " cards): ";
 //        for (size_t i = 0; i < hand.size(); i++) {
-//            if (i > 0) std::cout << " / ";
+//            if (i > 0) //std::cout << " / ";
 //            hand[i]->display();
 //        }
-//        std::cout << std::endl;
+//        //std::cout << std::endl;
 //    }
 //    std::string getName() { return name; }
 //    int getHandSize() { return hand.size(); }
@@ -201,20 +201,20 @@
 //    // {
 //    //     if (currentPlayer->hasMore15() || currentPlayer->hasNoCards() || currentPlayer->hasBothJokers())
 //    //     {
-//    //         std::cout << "===================게임 종료===================" << std::endl;
+//    //         //std::cout << "===================게임 종료===================" << std::endl;
 //    //         if (currentPlayer->hasMore15()) {
-//    //             std::cout << currentPlayer->getName() << "은 15장 이상의 카드를 보유하여 패배하였습니다!" << std::endl;
-//    //             std::cout << "=============================================" << std::endl;
+//    //             //std::cout << currentPlayer->getName() << "은 15장 이상의 카드를 보유하여 패배하였습니다!" << std::endl;
+//    //             //std::cout << "=============================================" << std::endl;
 //    //             return currentPlayer->hasMore15();
 //    //         }
 //    //         if (currentPlayer->hasBothJokers()) {
-//    //             std::cout << currentPlayer->getName() << "은 두 개의 조커를 가지고 있어 패배하였습니다!" << std::endl;
-//    //             std::cout << "=============================================" << std::endl;
+//    //             //std::cout << currentPlayer->getName() << "은 두 개의 조커를 가지고 있어 패배하였습니다!" << std::endl;
+//    //             //std::cout << "=============================================" << std::endl;
 //    //             return currentPlayer->hasBothJokers();
 //    //         }
 //    //         if (currentPlayer->hasNoCards()) {
-//    //             std::cout << currentPlayer->getName() << "가 모든 카드를 사용하여 승리하였습니다!" << std::endl;
-//    //             std::cout << "=============================================" << std::endl;
+//    //             //std::cout << currentPlayer->getName() << "가 모든 카드를 사용하여 승리하였습니다!" << std::endl;
+//    //             //std::cout << "=============================================" << std::endl;
 //    //             return currentPlayer->hasNoCards();
 //    //         }//currentPlayerIndex = (currentPlayerIndex + 1) % players.size(); // 턴 넘기기
 //    //     }
@@ -224,27 +224,27 @@
 //        // 게임 종료 조건 확인
 //        if (currentPlayer->hasMore15() || currentPlayer->hasNoCards() || currentPlayer->hasBothJokers())
 //        {
-//            std::cout << "===================게임 종료===================" << std::endl;
+//            //std::cout << "===================게임 종료===================" << std::endl;
 //
 //            if (currentPlayer->hasMore15()) {
-//                std::cout << currentPlayer->getName() << "은 15장 이상의 카드를 보유하여 패배하였습니다!" << std::endl;
+//                //std::cout << currentPlayer->getName() << "은 15장 이상의 카드를 보유하여 패배하였습니다!" << std::endl;
 //                int opponentIndex = (currentPlayerIndex + 1) % players.size();
-//                std::cout << players[opponentIndex]->getName() << "가 승리하였습니다!" << std::endl;
-//                std::cout << "=============================================" << std::endl;
+//                //std::cout << players[opponentIndex]->getName() << "가 승리하였습니다!" << std::endl;
+//                //std::cout << "=============================================" << std::endl;
 //                return true;
 //            }
 //
 //            if (currentPlayer->hasBothJokers()) {
-//                std::cout << currentPlayer->getName() << "은 두 개의 조커를 가지고 있어 패배하였습니다!" << std::endl;
+//                //std::cout << currentPlayer->getName() << "은 두 개의 조커를 가지고 있어 패배하였습니다!" << std::endl;
 //                int opponentIndex = (currentPlayerIndex + 1) % players.size();
-//                std::cout << players[opponentIndex]->getName() << "가 승리하였습니다!" << std::endl;
-//                std::cout << "=============================================" << std::endl;
+//                //std::cout << players[opponentIndex]->getName() << "가 승리하였습니다!" << std::endl;
+//                //std::cout << "=============================================" << std::endl;
 //                return true;
 //            }
 //
 //            if (currentPlayer->hasNoCards()) {
-//                std::cout << currentPlayer->getName() << "가 모든 카드를 사용하여 승리하였습니다!" << std::endl;
-//                std::cout << "=============================================" << std::endl;
+//                //std::cout << currentPlayer->getName() << "가 모든 카드를 사용하여 승리하였습니다!" << std::endl;
+//                //std::cout << "=============================================" << std::endl;
 //                return true;
 //            }
 //        }
@@ -252,8 +252,8 @@
 //        // 덱에 카드가 모두 소진되었는지 확인
 //        if (deck.isEmpty())
 //        {
-//            std::cout << "===================게임 종료===================" << std::endl;
-//            std::cout << "덱의 모든 카드가 소진되었습니다!" << std::endl;
+//            //std::cout << "===================게임 종료===================" << std::endl;
+//            //std::cout << "덱의 모든 카드가 소진되었습니다!" << std::endl;
 //
 //            // 적은 카드를 가진 플레이어 찾기
 //            std::shared_ptr<Player> winner = players[0];
@@ -262,8 +262,8 @@
 //                    winner = player;
 //                }
 //            }
-//            std::cout << winner->getName() << "가 더 적은 카드를 보유하여 승리하였습니다!" << std::endl;
-//            std::cout << "=============================================" << std::endl;
+//            //std::cout << winner->getName() << "가 더 적은 카드를 보유하여 승리하였습니다!" << std::endl;
+//            //std::cout << "=============================================" << std::endl;
 //            return true;
 //        }
 //        return false;  // 게임이 종료되지 않았으면 false 반환
@@ -292,18 +292,18 @@
 //    }
 //
 //    void start() {
-//        std::cout << "게임 시작!" << std::endl;
+//        //std::cout << "게임 시작!" << std::endl;
 //        std::this_thread::sleep_for(std::chrono::seconds(1));
 //        size_t currentPlayerIndex = 0;
 //        int attackStack=0; // 공격 누적치
 //        std::vector<std::shared_ptr<Card>> usedAttackCards;  // 이미 사용된 공격 카드를 추적
 //        while (true)
 //        {
-//            std::cout << "현재 더미 카드: ";
+//            //std::cout << "현재 더미 카드: ";
 //            dummyCard->display();
-//            std::cout << std::endl;
+//            //std::cout << std::endl;
 //            std::this_thread::sleep_for(std::chrono::seconds(1));
-//            std::cout << "deck 에 남은 카드 수: " << deck.getSize() << std::endl;
+//            //std::cout << "deck 에 남은 카드 수: " << deck.getSize() << std::endl;
 //            std::this_thread::sleep_for(std::chrono::seconds(1));
 //            bool defended = false;
 //            auto &currentPlayer = players[currentPlayerIndex];
@@ -316,14 +316,14 @@
 //                // 조커이면 무조건 먹음
 //                if (dummyCard->getType() == "Joker")
 //                {
-//                    std::cout << currentPlayer->getName() << "가 Joker 공격을 당해 " << attackStack << "장의 카드를 뽑습니다." << std::endl;
+//                    //std::cout << currentPlayer->getName() << "가 Joker 공격을 당해 " << attackStack << "장의 카드를 뽑습니다." << std::endl;
 //                    for (int i = 0; i < attackStack; i++)
 //                    {
 //                        // currentPlayer->drawCard(deck.draw());
-//                        // std::cout << currentPlayer->getName() << "가 덱에서 " << deck.draw()->getFullInfo() << "를 뽑았습니다." << std::endl;
+//                        // //std::cout << currentPlayer->getName() << "가 덱에서 " << deck.draw()->getFullInfo() << "를 뽑았습니다." << std::endl;
 //                        auto drawnCard = deck.draw();  // 카드를 한 번만 뽑고
 //                        currentPlayer->drawCard(drawnCard);
-//                        std::cout << currentPlayer->getName() << "가 덱에서 " << drawnCard->getFullInfo() << "를 뽑았습니다." << std::endl;
+//                        //std::cout << currentPlayer->getName() << "가 덱에서 " << drawnCard->getFullInfo() << "를 뽑았습니다." << std::endl;
 //                    }
 //                    currentPlayer->showHand(); // hand에 수정되는지 확인
 //                    std::this_thread::sleep_for(std::chrono::seconds(1));
@@ -341,15 +341,15 @@
 //                            if (card->getAttackPower()>0) attackStack+=card->getAttackPower(); // 공격카드로 대처한 경우 (Stack 누적)
 //                            else attackStack=0; // 방어카드로 대처한 경우( Stack 초기화 )
 //                            dummyCard = card;  // 더미 카드 갱신
-//                            std::cout << currentPlayer->getName() << "가 " << card->getFullInfo() << "로 대응했습니다." << std::endl;
+//                            //std::cout << currentPlayer->getName() << "가 " << card->getFullInfo() << "로 대응했습니다." << std::endl;
 //                            std::this_thread::sleep_for(std::chrono::seconds(1));
-//                            std::cout << "현재 더미 카드: ";
+//                            //std::cout << "현재 더미 카드: ";
 //                            currentPlayer->showHand(); // hand에 수정되는지 확인
 //                            std::this_thread::sleep_for(std::chrono::seconds(1));
 //                            if (currentPlayer->checkGameOver(currentPlayer,players, currentPlayerIndex, deck)) {return;} // 종료 조건 확인
 //                            attackStack=0;
 //                            dummyCard->display();
-//                            std::cout << std::endl;
+//                            //std::cout << std::endl;
 //                            break;
 //                        }
 //                    }
@@ -357,14 +357,14 @@
 //                    if (!defended)
 //                    {
 //                        // 방어할 카드가 없으면 공격에 맞춰 카드 뽑기
-//                        std::cout << currentPlayer->getName() << "가 공격당해 " << attackStack << "장의 카드를 뽑습니다." << std::endl;
+//                        //std::cout << currentPlayer->getName() << "가 공격당해 " << attackStack << "장의 카드를 뽑습니다." << std::endl;
 //                        std::this_thread::sleep_for(std::chrono::seconds(1));
 //                        for (int i = 0; i < attackStack; i++) {
 //                            // currentPlayer->drawCard(deck.draw());
-//                            // std::cout << currentPlayer->getName() << "가 덱에서 " << deck.draw()->getFullInfo() << "를 뽑았습니다." << std::endl;
+//                            // //std::cout << currentPlayer->getName() << "가 덱에서 " << deck.draw()->getFullInfo() << "를 뽑았습니다." << std::endl;
 //                            auto drawnCard = deck.draw();  // 카드를 한 번만 뽑고
 //                            currentPlayer->drawCard(drawnCard);
-//                            std::cout << currentPlayer->getName() << "가 덱에서 " << drawnCard->getFullInfo() << "를 뽑았습니다." << std::endl;
+//                            //std::cout << currentPlayer->getName() << "가 덱에서 " << drawnCard->getFullInfo() << "를 뽑았습니다." << std::endl;
 //                        }
 //                        currentPlayer->showHand(); // hand에 수정되는지 확인
 //                        std::this_thread::sleep_for(std::chrono::seconds(1));
@@ -384,7 +384,7 @@
 //                    played = false;
 //                    for (const auto& card : currentPlayer->getHand()) {
 //                        if (currentPlayer->canPlayCard(card, dummyCard, cnt == 0)) {
-//                            std::cout << currentPlayer->getName() << "가 " << card->getFullInfo() << "를 냈습니다." << std::endl;
+//                            //std::cout << currentPlayer->getName() << "가 " << card->getFullInfo() << "를 냈습니다." << std::endl;
 //                            std::this_thread::sleep_for(std::chrono::seconds(1));
 //                            cnt++;
 //                            dummyCard = card;  // 더미 카드 갱신
@@ -402,9 +402,9 @@
 //                    // 카드가 없으면 덱에서 한 장 뽑기
 //                    auto drawnCard = deck.draw();
 //                    currentPlayer->drawCard(drawnCard);
-//                    std::cout << currentPlayer->getName() << "가 낼 카드가 없어 한 장을 뽑습니다." << std::endl;
+//                    //std::cout << currentPlayer->getName() << "가 낼 카드가 없어 한 장을 뽑습니다." << std::endl;
 //                    std::this_thread::sleep_for(std::chrono::seconds(1));
-//                    std::cout << currentPlayer->getName() << "가 덱에서 " << drawnCard->getFullInfo() << "를 뽑았습니다." << std::endl;
+//                    //std::cout << currentPlayer->getName() << "가 덱에서 " << drawnCard->getFullInfo() << "를 뽑았습니다." << std::endl;
 //                    std::this_thread::sleep_for(std::chrono::seconds(1));
 //                    currentPlayer->showHand(); // hand에 추가되는지 확인
 //                    std::this_thread::sleep_for(std::chrono::seconds(1));

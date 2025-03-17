@@ -16,8 +16,8 @@
 #include "Player.hpp"
 
 constexpr bool timeOn = false;
-constexpr int timeSleep = 10;
-
+constexpr int timeSleep = 100;
+constexpr int CARD_LIM = 10;
 class Game
 {
 private:

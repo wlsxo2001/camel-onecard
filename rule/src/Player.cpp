@@ -1,5 +1,7 @@
 #include "Player.hpp"
 
+#include "Game.hpp"
+
 
 Player::Player(std::string n) : name(n) {}
 
@@ -12,13 +14,13 @@ void Player::drawCard(std::shared_ptr<Card> card)
 //hand에 있는 모든 card 출력
 void Player::showHand()
 {
-    std::cout << name << "'s Hand (" << hand.size() << " cards): ";
+    //std::cout << name << "'s Hand (" << hand.size() << " cards): ";
     for (size_t i = 0; i < hand.size(); i++)
     {
-        if (i > 0) std::cout << " / ";
+        if (i > 0) //std::cout << " / ";
         hand[i]->display();
     }
-    std::cout << std::endl;
+    //std::cout << std::endl;
 }
 
 //현재 player의 이름 반환
@@ -30,7 +32,7 @@ std::string Player::getName()
 //현재 player의 hand에 card 수 반환
 int Player::getHandSize()
 {
-    //if (hand.size() == 1) std::cout << getName() << ": 원카드!" << std::endl;
+    //if (hand.size() == 1) //std::cout << getName() << ": 원카드!" << std::endl;
     return hand.size();
 }
 
@@ -66,7 +68,7 @@ bool Player::hasBothJokers()
 //보유 카드 수 초과 여부 (현재는 10장으로 설정)
 bool Player::hasMore15()
 {
-    return hand.size() >= 10;
+    return hand.size() >= CARD_LIM;
 }
 
 //hand의 카드 소진 여부
@@ -102,13 +104,13 @@ bool Player::checkGameOver(std::shared_ptr<Player> currentPlayer, std::vector<st
 
     if (currentPlayer->hasMore15() || currentPlayer->hasNoCards() || currentPlayer->hasBothJokers())
     {
-        std::cout << "=============================================" << std::endl;
+        //std::cout << "=============================================" << std::endl;
 
         if (currentPlayer->hasMore15())
         {
-            std::cout << currentPlayer->getName() << "is 10장 이상의 카드를 보유하여 탈락하였습니다!" << std::endl;
-            std::cout << currentPlayer->getName() << "의 Hand에 있던 카드는 모두 deck에 추가됩니다." << std::endl;
-            std::cout << "=============================================" << std::endl;
+            //std::cout << currentPlayer->getName() << "is 10장 이상의 카드를 보유하여 탈락하였습니다!" << std::endl;
+            //std::cout << currentPlayer->getName() << "의 Hand에 있던 카드는 모두 deck에 추가됩니다." << std::endl;
+            //std::cout << "=============================================" << std::endl;
             deck.addDeck(currentPlayer->getHand());
             loser = true;
 
@@ -116,18 +118,18 @@ bool Player::checkGameOver(std::shared_ptr<Player> currentPlayer, std::vector<st
 
         else if (currentPlayer->hasBothJokers())
         {
-            std::cout << currentPlayer->getName() << "is 두 개의 조커를 가지고 있어 탈락하였습니다!" << std::endl;
-            std::cout << currentPlayer->getName() << "의 Hand에 있던 카드는 모두 deck에 추가됩니다." << std::endl;
-            std::cout << "=============================================" << std::endl;
+            //std::cout << currentPlayer->getName() << "is 두 개의 조커를 가지고 있어 탈락하였습니다!" << std::endl;
+            // //std::cout << currentPlayer->getName() << "의 Hand에 있던 카드는 모두 deck에 추가됩니다." << std::endl;
+            //std::cout << "=============================================" << std::endl;
             deck.addDeck(currentPlayer->getHand());
             loser = true;
         }
 
         else if (currentPlayer->hasNoCards())
         {
-            std::cout << currentPlayer->getName() << "is 모든 카드를 사용하여 승리하였습니다!" << std::endl;
-            std::cout << "(남은 사람이 있으면 순위 결정을 위해서 계속 진행합니다.)" << std::endl;
-            std::cout << "=============================================" << std::endl;
+            //std::cout << currentPlayer->getName() << "is 모든 카드를 사용하여 승리하였습니다!" << std::endl;
+            //std::cout << "(남은 사람이 있으면 순위 결정을 위해서 계속 진행합니다.)" << std::endl;
+            //std::cout << "=============================================" << std::endl;
             winner = true;
         }
 
@@ -241,16 +243,43 @@ std::shared_ptr<Card> Player::optimalCard(std::shared_ptr<Card>& dummyCard , int
 std::shared_ptr<Card> Player::optimalCardGaseong(std::shared_ptr<Card>& dummyCard , int cnt) // cnt는 턴 내에서 첫번째로 내는 카드인지 구분하기 위함.
 {
     std::vector<std::shared_ptr<Card>> playableNormalCard;
+    std::vector<std::shared_ptr<Card>> playableAttackCard;
     std::vector<std::shared_ptr<Card>> playableDefenceCard;
+    std::vector<std::shared_ptr<Card>> playableJokerCard;
+    std::vector<std::shared_ptr<Card>> playableKingCard;
+    std::vector<std::shared_ptr<Card>> playableLastCard;
+
+    std::string shapes[] = {"♠", "♦", "♣", "♥"};
+    std::string values[] = {"A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"};
+
+
     for (const auto& card : this->getHand())
     {
         if (this->canPlayCard(card, dummyCard, cnt))
         {
             if (card -> getType() == "Joker")
             {
-                return card;
+                playableJokerCard.push_back(card);
+                // return card;
             }
-            else if (card -> getValue() == "3")
+
+            if (card -> getType() == "K")
+            {
+                playableKingCard.push_back(card);
+                // return card;
+            }
+
+            if (card -> getType() == "A" or card -> getType() == "2")
+            {
+                playableAttackCard.push_back(card);
+            }
+
+            if (card -> getType() == "J" or card -> getType() == "Q")
+            {
+                playableLastCard.push_back(card);
+            }
+
+            if (card -> getValue() == "3")
             {
                 playableDefenceCard.push_back(card);
             }
@@ -261,191 +290,72 @@ std::shared_ptr<Card> Player::optimalCardGaseong(std::shared_ptr<Card>& dummyCar
         }
     }
 
-    if (playableNormalCard.size() == 0 && playableDefenceCard.size() == 0)
+
+    for (const auto& card: playableJokerCard)
     {
-        return nullptr;
-    }
-    else
-    {
-        for (const auto& card : playableNormalCard)
-        {
-            return card;
-        }
-        for (const auto& card: playableDefenceCard)
-        {
-            return card;
-        }
+        return card;
     }
 
-    //
-    // for (auto &card : playableNormalCard)
-    // {
-    //
-    // }
+    for (const auto& card: playableKingCard)
+    {
+        return card;
+    }
 
-    // std::vector<std::shared_ptr<Card>> playableNormalCard;
-    // std::string shapes[] = {"♠", "♦", "♣", "♥"};
-    // std::string values[] = {"A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"};
-    //
-    // for (const auto& card : this->getHand())
-    // {
-    //     if (this->canPlayCard(card, dummyCard, cnt))
-    //     {
-    //         if (card -> getType() == "Joker")
-    //         {
-    //             return card;
-    //         }
-    //         else
-    //         {
-    //             playableNormalCard.push_back(card);
-    //         }
-    //     }
-    // }
-    // int shapeCount[4];
-    // int numberCount[13];
-    //
-    // for (auto& card : playableNormalCard)
-    // {
-    //     if (card->getShape() == "♠") { shapeCount[0]++; }
-    //     else if(card->getShape() == "♦") { shapeCount[1]++; }
-    //     else if(card->getShape() == "♣") { shapeCount[2]++; }
-    //     else if(card->getShape() == "♥") { shapeCount[3]++; }
-    //
-    //     if (card->getValue() == "A") { numberCount[0]++; }
-    //     else if(card->getValue() == "2") { numberCount[1]++; }
-    //     else if(card->getValue() == "3") { numberCount[2]++; }
-    //     else if(card->getValue() == "4") { numberCount[3]++; }
-    //     else if(card->getValue() == "5") { numberCount[4]++; }
-    //     else if(card->getValue() == "6") { numberCount[5]++; }
-    //     else if(card->getValue() == "7") { numberCount[6]++; }
-    //     else if(card->getValue() == "8") { numberCount[7]++; }
-    //     else if(card->getValue() == "9") { numberCount[8]++; }
-    //     else if(card->getValue() == "10") { numberCount[9]++; }
-    //     else if(card->getValue() == "J") { numberCount[10]++; }
-    //     else if(card->getValue() == "Q") { numberCount[11]++; }
-    //     else if(card->getValue() == "K") { numberCount[12]++; }
-    // }
-    //
-    // int maxShape=0;
-    // int maxShapeIdx=0;
-    //
-    // int maxNumber=0;
-    // int maxNumberIdx=0;
-    //
-    // for (int i=0; i<4; i++)
-    // {
-    //     if (shapeCount[i] > maxShape)
-    //     {
-    //         maxShape = shapeCount[i];
-    //         maxShapeIdx = i;
-    //     }
-    // }
-    //
-    // for (int i=0; i<13; i++)
-    // {
-    //     if (numberCount[i] > maxShape)
-    //     {
-    //         maxShape = numberCount[i];
-    //         maxNumberIdx = i;
-    //     }
-    // }
-    //
-    //
-    // if (maxShape > maxNumber)
-    // {
-    //     for (auto& card : playableNormalCard)
-    //     {
-    //         if (card ->getShape() == shapes[maxShapeIdx])
-    //         {
-    //             return card;
-    //         }
-    //     }
-    // }
-    // else
-    // {
-    //     for (auto& card : playableNormalCard)
-    //     {
-    //         if (card ->getValue() == shapes[maxNumberIdx])
-    //         {
-    //             return card;
-    //         }
-    //     }
-    // }
+    for (const auto& card: playableAttackCard)
+    {
+        return card;
+    }
+
+    for (const auto& card : playableNormalCard)
+    {
+        return card;
+    }
+
+    for (const auto& card: playableLastCard)
+    {
+        return card;
+    }
+
+    for (const auto& card: playableDefenceCard)
+    {
+        return card;
+    }
 
     return nullptr;
 }
 
 std::shared_ptr<Card> Player::KMSoptimalCard(std::shared_ptr<Card>& dummyCard, int cnt)
 {
-    std::shared_ptr<Card> bestCard = nullptr;
-    std::unordered_map<std::string, int> shapeCount;
-    std::unordered_map<std::string, int> valueCount;
-    for (const auto& card : this->getHand())
     {
-        shapeCount[card->getShape()]++;
-        valueCount[card->getValue()]++;
-    }
-    for (const auto& card : this->getHand())
-    {
-        if (this->canPlayCard(card, dummyCard, cnt))
+        for (const auto& card : this->getHand())
         {
-            if (card->getAttackPower() > 0)
+            if (this->canPlayCard(card, dummyCard, cnt) && card->getAttackPower() > 0)
+            {
+                return card;
+            }
+            else if (this->canPlayCard(card, dummyCard, cnt))
             {
                 return card;
             }
         }
+        return nullptr;
     }
-    std::string bestValue;
-    int maxValueCount = 0;
-    for (const auto& [value, count] : valueCount)
-    {
-        if (count > maxValueCount)
-        {
-            maxValueCount = count;
-            bestValue = value;
-        }
-    }
-    for (const auto& card : this->getHand())
-    {
-        if (this->canPlayCard(card, dummyCard, cnt))
-        {
-            if (card->getValue() == bestValue)
-            {
-                return card;
-            }
-        }
-    }
-    std::string bestShape;
-    int maxShapeCount = 0;
-    for (const auto& [shape, count] : shapeCount)
-    {
-        if (count > maxShapeCount)
-        {
-            maxShapeCount = count;
-            bestShape = shape;
-        }
-    }
-    for (const auto& card : this->getHand())
-    {
-        if (this->canPlayCard(card, dummyCard, cnt))
-        {
-            if (card->getShape() == bestShape)
-            {
-                return card;
-            }
-        }
-    }
-    return nullptr;
 }
 
 std::shared_ptr<Card> Player::optimalCardCw(std::shared_ptr<Card>& dummyCard , int cnt) // cnt는 턴 내에서 첫번째로 내는 카드인지 구분하기 위함.
 {
 
     std::unordered_map<std::string, int> customOrder = {
-        {"J", 1}, {"Colored", 2}, {"Black & White", 3}, {"7", 4}, {"2", 5}, {"4", 6}, {"5", 7},
-        {"6", 8}, {"8", 9}, {"9", 10}, {"10", 11}, {"Q", 12}, {"K", 13},
-        {"A", 14}, {"3", 15}
+        {"K", 1}, {"Colored", 2}, {"Black & White", 3}, {"A", 4}, {"2", 5}, {"7", 6}, {"5", 7},
+        {"6", 8}, {"8", 9}, {"9", 10}, {"10", 11}, {"4", 12}, {"J", 13},
+        {"Q", 14}, {"3", 15}
     };
+
+    // std::unordered_map<std::string, int> customOrder = {
+    //     {"J", 1}, {"Colored", 2}, {"Black & White", 3}, {"7", 4}, {"2", 5}, {"4", 6}, {"5", 7},
+    //     {"6", 8}, {"8", 9}, {"9", 10}, {"10", 11}, {"Q", 12}, {"K", 13},
+    //     {"A", 14}, {"3", 15}
+    // };
 
     std::sort(hand.begin(), hand.end(), [&](const std::shared_ptr<Card>& a, const std::shared_ptr<Card>& b)
     {
@@ -459,6 +369,118 @@ std::shared_ptr<Card> Player::optimalCardCw(std::shared_ptr<Card>& dummyCard , i
     }
     return nullptr;
 }
+
+std::shared_ptr<Card> Player::optimalCardTaegun(std::shared_ptr<Card>& dummyCard , int cnt) // cnt는 턴 내에서 첫번째로 내는 카드인지 구분하기 위함.
+{
+    std::vector<std::shared_ptr<Card>> playableNormalCard;
+    std::string shapes[] = {"♠", "♦", "♣", "♥"};
+    std::string values[] = {"A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"};
+
+    for (const auto& card : this->getHand())
+    {
+        if (this->canPlayCard(card, dummyCard, cnt))
+        {
+            if (card->getType() == "Joker")
+            {
+                return card;
+            }
+            else
+            {
+                playableNormalCard.push_back(card);
+            }
+        }
+    }
+
+    int shapeCount[4] = {0};
+    int numberCount[13] = {0};
+
+    for (auto& card : playableNormalCard)
+    {
+        if (card->getShape() == "♠") { shapeCount[0]++; }
+        else if (card->getShape() == "♦") { shapeCount[1]++; }
+        else if (card->getShape() == "♣") { shapeCount[2]++; }
+        else if (card->getShape() == "♥") { shapeCount[3]++; }
+        if (card->getValue() == "A") { numberCount[0]++; }
+        else if (card->getValue() == "2") { numberCount[1]++; }
+        else if (card->getValue() == "3") { numberCount[2]++; }
+        else if (card->getValue() == "4") { numberCount[3]++; }
+        else if (card->getValue() == "5") { numberCount[4]++; }
+        else if (card->getValue() == "6") { numberCount[5]++; }
+        else if (card->getValue() == "7") { numberCount[6]++; }
+        else if (card->getValue() == "8") { numberCount[7]++; }
+        else if (card->getValue() == "9") { numberCount[8]++; }
+        else if (card->getValue() == "10") { numberCount[9]++; }
+        else if (card->getValue() == "J") { numberCount[10]++; }
+        else if (card->getValue() == "Q") { numberCount[11]++; }
+        else if (card->getValue() == "K") { numberCount[12]++; }
+    }
+    int maxShapeIdx = std::distance(shapeCount, std::max_element(shapeCount, shapeCount + 4));
+    int maxNumberIdx = std::distance(numberCount, std::max_element(numberCount, numberCount + 13));
+
+    for (auto& card : playableNormalCard)
+    {
+        if (card->getValue() == "2" || card->getValue() == "A")
+        {
+            return card; // 공격 카드 우선 사용
+        }
+    }
+
+    if (shapeCount[maxShapeIdx] > numberCount[maxNumberIdx])
+    {
+        for (auto& card : playableNormalCard)
+        {
+            if (card->getShape() == shapes[maxShapeIdx])
+            {
+                return card;
+            }
+        }
+    }
+    else
+    {
+        for (auto& card : playableNormalCard)
+        {
+            if (card->getValue() == values[maxNumberIdx])
+            {
+                return card;
+            }
+        }
+    }
+
+    return nullptr;
+}
+
+std::shared_ptr<Card> Player::hyOptimalCard(std::shared_ptr<Card>& dummyCard , int cnt) // cnt는 턴 내에서 첫번째로 내는 카드인지 구분하기 위함.
+{
+    std::vector<std::shared_ptr<Card>> cards1,cards2,cards3;
+    for (const auto& card : this->getHand())
+    {
+        if (this->canPlayCard(card, dummyCard, cnt))
+            // canPlayCard를 굳이 한번 더 체크하지않아도됨. Game 클래스에서 한번 더 확인함.
+                // but Game 클래스에서 canPlayCard가 만족되지않으면 낼 카드가 없다고 간주됨.
+        {
+            if (card->getValue() == "2" || card->getValue()=="A") {
+                cards1.push_back(card);
+            }
+            else if (card->getValue() == "3") {
+                cards2.push_back(card);
+            }
+            else {
+                cards3.push_back(card);
+            }
+        }
+    }
+    if (cards3.empty()) {
+        if (cards2.empty()) {
+            if (cards1.empty())
+                return nullptr;
+            return cards1.front();
+        }
+        return cards2.front();
+    }
+    return cards3.front();
+}
+
+
 
 // 3) 7번 카드가 나왔을 때 처리 함수
 // 일단은 hand내에서 최빈 shape으로 바꾸도록 해놨는데 뭔가 제대로 안됨
@@ -490,7 +512,7 @@ bool Player::card7change(const std::shared_ptr<Card>& dummyCard)
 
     if ( mostFrequentShape == dummyCard->getShape() )
     {
-        //std::cout << "카드의 모양을 변경하지 않습니다." << std::endl; //탬플릿 통일을 위해서 Game class에서 실행됨
+        ////std::cout << "카드의 모양을 변경하지 않습니다." << std::endl; //탬플릿 통일을 위해서 Game class에서 실행됨
         return false;
     }
 
@@ -498,7 +520,7 @@ bool Player::card7change(const std::shared_ptr<Card>& dummyCard)
     if (!mostFrequentShape.empty())
     {
         dummyCard->changeShape(mostFrequentShape);
-        //std::cout << "카드의 모양이 " << mostFrequentShape << "로 변경되었습니다." << std::endl; //탬플릿 통일을 위해서 Game class에서 실행됨
+        ////std::cout << "카드의 모양이 " << mostFrequentShape << "로 변경되었습니다." << std::endl; //탬플릿 통일을 위해서 Game class에서 실행됨
         return true;
     }
     return false;

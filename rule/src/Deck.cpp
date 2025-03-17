@@ -26,14 +26,14 @@ Deck::Deck()
 // deck에 있는 카드를 섞는 함서
 void Deck::shuffle()
 {
-    std::cout << "카드 섞는중 ..." << std::endl;
+    //std::cout << "카드 섞는중 ..." << std::endl;
     srand(time(0));
     if (timeOn)
     {
         std::this_thread::sleep_for(std::chrono::milliseconds(timeSleep));
     }
     std::shuffle(cards.begin(), cards.end(), std::mt19937(std::random_device()()));
-    std::cout << "deck 에 남은 카드 수: " << cards.size() << std::endl;
+    //std::cout << "deck 에 남은 카드 수: " << cards.size() << std::endl;
     if (timeOn)
     {
         std::this_thread::sleep_for(std::chrono::milliseconds(timeSleep));
@@ -46,13 +46,13 @@ std::shared_ptr<Card> Deck::draw()
     if (cards.empty())
     {
         emptyCnt=1;
-        std::cout << "덱의 모든 카드가 소진되었습니다!" << std::endl;
+        //std::cout << "덱의 모든 카드가 소진되었습니다!" << std::endl;
         //return nullptr;
         if (timeOn)
         {
             std::this_thread::sleep_for(std::chrono::milliseconds(timeSleep));
         }
-        std::cout << "사용된 카드를 다시 섞어 덱을 재구성합니다..." << std::endl;
+        //std::cout << "사용된 카드를 다시 섞어 덱을 재구성합니다..." << std::endl;
         if (timeOn)
         {
             std::this_thread::sleep_for(std::chrono::milliseconds(timeSleep));
@@ -100,7 +100,7 @@ void Deck::addUsedCard(std::shared_ptr<Card> playedCard)
 //탈락자 발생 시 사용, 탈락자 hand에 있는 카드를 deck에 추가하여 다시 shuffle
 void Deck::addDeck(std::vector<std::shared_ptr<Card>> loserCard)
 {
-    std::cout << "덱에 카드를 추가하고 다시 섞습니다.." << std::endl;
+    //std::cout << "덱에 카드를 추가하고 다시 섞습니다.." << std::endl;
     if (timeOn)
     {
         std::this_thread::sleep_for(std::chrono::milliseconds(timeSleep));

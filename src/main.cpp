@@ -6,11 +6,9 @@
 // 진태,찬우,가성,지희,민성,태건,혜연
 int main()
 {
-
-
     int win_count[7] = {0};
     int count = 0;
-    for (int i=0; i<10000; i++)
+    for (int i=0; i<30000; i++)
     {
         Game game;
         std::string winner = game.start();

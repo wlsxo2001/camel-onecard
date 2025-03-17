@@ -4,19 +4,23 @@
 
 Game::Game()
 {
-    std::cout << "게임 시작!" << std::endl;
+    //std::cout << "게임 시작!" << std::endl;
     if (timeOn)
     {
         std::this_thread::sleep_for(std::chrono::milliseconds(timeSleep));
     }
     std::string input;
-    std::cout << "Player 이름을 ','로 구분하여 입력하세요: ";
+    //std::cout << "Player 이름을 ','로 구분하여 입력하세요: ";
     // std::getline(std::cin, input);
     input = "가성,진태,찬우,태건,혜연,지희,민성";
 
     std::random_device rd;
     std::mt19937 g(rd());
-    std::vector<std::string> nameVector = {"가성", "진태", "찬우", "태건", "혜연", "지희", "민성"};
+
+    // std::vector<std::string> nameVector = {"찬우", "혜연"};
+    // std::vector<std::string> nameVector = {"혜연", "가성"};
+    std::vector<std::string> nameVector = {"가성", "혜연", "민성", "찬우",  "지희", "진태", "태건"};
+    // std::vector<std::string> nameVector = {"찬우", "가성"};
     std::shuffle(nameVector.begin(),nameVector.end(), g);
 
     for (auto &name : nameVector)
@@ -40,28 +44,28 @@ Game::Game()
     // }
 
     // 생성된 플레이어 출력
-    std::cout << "\n생성된 플레이어 목록:\n";
+    //std::cout << "\n생성된 플레이어 목록:\n";
     for (const auto& player : players)
     {
-        std::cout << player->getName() << "/";
+        //std::cout << player->getName() << "/";
     }
-    std::cout << "\b" <<std::endl;
+    //std::cout << "\b" <<std::endl;
     if (timeOn)
     {
         std::this_thread::sleep_for(std::chrono::milliseconds(timeSleep));
     }
-    std::cout << "\n플레이 순서:\n";
+    //std::cout << "\n플레이 순서:\n";
     for (const auto& player : players)
     {
-        std::cout << player->getName() << "->";
+        //std::cout << player->getName() << "->";
     }
-    std::cout << "\b\b" <<std::endl << std::endl;
+    //std::cout << "\b\b" <<std::endl << std::endl;
     if (timeOn)
     {
         std::this_thread::sleep_for(std::chrono::milliseconds(timeSleep));
     }
 
-    std::cout << "인당 5장씩 카드를 배분합니다.." << std::endl;
+    //std::cout << "인당 5장씩 카드를 배분합니다.." << std::endl;
     if (timeOn)
     {
         std::this_thread::sleep_for(std::chrono::milliseconds(timeSleep));
@@ -82,10 +86,10 @@ Game::Game()
     {
         if (dummyCard->getAttackPower() > 0)
         {
-            std::cout << "현재 더미 카드: ";
+            //std::cout << "현재 더미 카드: ";
             dummyCard->display();
-            std::cout << std::endl;
-            std::cout << "더미의 첫 카드가 공격카드이므로 다시 뽑습니다." << std::endl;
+            //std::cout << std::endl;
+            //std::cout << "더미의 첫 카드가 공격카드이므로 다시 뽑습니다." << std::endl;
             if (timeOn)
             {
                 std::this_thread::sleep_for(std::chrono::milliseconds(timeSleep));
@@ -120,14 +124,14 @@ std::string Game::printRanking()
         losers.clear(); // 중복 방지
     }
 
-    std::cout << "=========최종순위=========" << std::endl;
+    //std::cout << "=========최종순위=========" << std::endl;
     for (size_t i=0; i<ranking.size() ; i++)
     {
-        std::cout << "|      " << i+1 << "등 : ";
-        std::cout << (ranking[i])->getName() << "        |"<< std::endl;
+        //std::cout << "|      " << i+1 << "등 : ";
+        //std::cout << (ranking[i])->getName() << "        |"<< std::endl;
     }
 
-    std::cout << "========================" << std::endl;
+    //std::cout << "========================" << std::endl;
 
     return (ranking[0])->getName();
     // return "가성";
@@ -151,16 +155,16 @@ std::string Game::start()
 
     while (true) // 게임이 종료될 때까지 계속 턴 반복
     {
-        std::cout << "================================" << std::endl;
-        std::cout << "현재 더미 카드: ";
+        //std::cout << "================================" << std::endl;
+        //std::cout << "현재 더미 카드: ";
         dummyCard->display();
-        std::cout << std::endl;
+        //std::cout << std::endl;
         if (timeOn)
         {
             std::this_thread::sleep_for(std::chrono::milliseconds(timeSleep));
         }
-        std::cout << "deck 에 남은 카드 수: " << deck.getSize() << std::endl;
-        std::cout << "================================" << std::endl;
+        //std::cout << "deck 에 남은 카드 수: " << deck.getSize() << std::endl;
+        //std::cout << "================================" << std::endl;
         if (timeOn)
         {
             std::this_thread::sleep_for(std::chrono::milliseconds(timeSleep));
@@ -177,7 +181,7 @@ std::string Game::start()
             // 조커 공격 처리 , 조커는 무조건 1장씩이므로 attackStack 누적을 고려할 필요없음.
             if (dummyCard->getType() == "Joker")
             {
-                std::cout << currentPlayer->getName() << " is Joker 공격을 당해 " << dummyCard->getAttackPower() << "장의 카드를 뽑아야 합니다." << std::endl;
+                //std::cout << currentPlayer->getName() << " is Joker 공격을 당해 " << dummyCard->getAttackPower() << "장의 카드를 뽑아야 합니다." << std::endl;
                 if (timeOn)
                 {
                     std::this_thread::sleep_for(std::chrono::milliseconds(timeSleep));
@@ -187,7 +191,7 @@ std::string Game::start()
                     auto drawnCard = deck.draw();
                     eraseUsedAttackCards();
                     currentPlayer->drawCard(drawnCard);
-                    std::cout << currentPlayer->getName() << " is 덱에서 " << drawnCard->getFullInfo() << "를 뽑았습니다." << std::endl;
+                    //std::cout << currentPlayer->getName() << " is 덱에서 " << drawnCard->getFullInfo() << "를 뽑았습니다." << std::endl;
                 }
                 currentPlayer->showHand();
                 if (timeOn)
@@ -208,7 +212,8 @@ std::string Game::start()
                 // //필요한 정보들(ex.상대방이 냈던 카드들)은 각자의 방식으로 함수의 매개변수로 끌어다쓰면됨.(cheating이 아닌 범주 안에서)
                 if (currentPlayer->getName()=="민성")
                 {
-                   card = currentPlayer->KMScounterCard(dummyCard);
+                   // card = currentPlayer->KMScounterCard(dummyCard);
+                   card = currentPlayer->counterCard(dummyCard);
                 }
                 else
                 {
@@ -224,7 +229,7 @@ std::string Game::start()
                     currentPlayer->playCard(card,deck);//                 반격 시                       방어 시
                     attackStack = (card->getAttackPower() > 0) ? attackStack + card->getAttackPower() : 0;
                     dummyCard = card;
-                    std::cout << currentPlayer->getName() << " is " << card->getFullInfo() << "로 대응했습니다." << std::endl;
+                    //std::cout << currentPlayer->getName() << " is " << card->getFullInfo() << "로 대응했습니다." << std::endl;
                     if (timeOn)
                     {
                         std::this_thread::sleep_for(std::chrono::milliseconds(timeSleep));
@@ -232,13 +237,13 @@ std::string Game::start()
                     currentPlayer->showHand();
                     if ( card->getValue() == "3" ) attackStack = 0; // else make higher attackStack
                     //dummyCard->display();
-                    //std::cout << std::endl;
+                    ////std::cout << std::endl;
                 }
 
                 // 대응 실패 시 카드 뽑기
                 if (!defended)
                 {
-                    std::cout << currentPlayer->getName() << " is 공격당해 " << attackStack << "장의 카드를 뽑습니다." << std::endl;
+                    //std::cout << currentPlayer->getName() << " is 공격당해 " << attackStack << "장의 카드를 뽑습니다." << std::endl;
                     if (timeOn)
                     {
                         std::this_thread::sleep_for(std::chrono::milliseconds(timeSleep));
@@ -248,7 +253,7 @@ std::string Game::start()
                         auto drawnCard = deck.draw();
                         eraseUsedAttackCards();
                         currentPlayer->drawCard(drawnCard);
-                        std::cout << currentPlayer->getName() << " is 덱에서 " << drawnCard->getFullInfo() << "를 뽑았습니다." << std::endl;
+                        //std::cout << currentPlayer->getName() << " is 덱에서 " << drawnCard->getFullInfo() << "를 뽑았습니다." << std::endl;
                     }
                     currentPlayer->showHand();
                     usedAttackCards.push_back(dummyCard);
@@ -275,7 +280,8 @@ std::string Game::start()
                 {
                     //진태,찬우,가성,지희,민성,태건,혜연
                     // card = currentPlayer->optimalCard(dummyCard, cnt);
-                    card = currentPlayer->optimalCard(dummyCard, cnt);
+                    // card = currentPlayer->optimalCardGaseong(dummyCard, cnt);
+                    card = currentPlayer ->hyOptimalCard(dummyCard,cnt);
                 }
                 else if (currentPlayer->getName()=="민성")
                 {
@@ -284,6 +290,14 @@ std::string Game::start()
                 else if (currentPlayer->getName()=="찬우")
                 {
                     card = currentPlayer -> optimalCardCw(dummyCard, cnt);
+                }
+                else if (currentPlayer->getName()=="혜연")
+                {
+                    card = currentPlayer ->hyOptimalCard(dummyCard,cnt);
+                }
+                else if (currentPlayer->getName()=="태건")
+                {
+                    card = currentPlayer ->optimalCardTaegun(dummyCard,cnt);
                 }
                 else
                 {
@@ -309,7 +323,7 @@ std::string Game::start()
                     {
                         attackStack += card->getAttackPower();
                     }
-                    std::cout << currentPlayer->getName() << " is " << card->getFullInfo() << "를 냈습니다." << std::endl;
+                    //std::cout << currentPlayer->getName() << " is " << card->getFullInfo() << "를 냈습니다." << std::endl;
                     if (timeOn)
                     {
                         std::this_thread::sleep_for(std::chrono::milliseconds(timeSleep));
@@ -335,11 +349,11 @@ std::string Game::start()
                         if ( currentPlayer->card7change(dummyCard) == true )
                         {
                             change7cnt++;// 바꿨으면 count 후 턴 종료
-                            std::cout << "카드의 모양이 " << dummyCard->getShape() << "로 변경되었습니다." << std::endl;
+                            //std::cout << "카드의 모양이 " << dummyCard->getShape() << "로 변경되었습니다." << std::endl;
                         }
                         else
                         {
-                            std::cout << "카드의 모양을 변경하지 않습니다." << std::endl;
+                            //std::cout << "카드의 모양을 변경하지 않습니다." << std::endl;
                         }
                     }
 
@@ -347,12 +361,12 @@ std::string Game::start()
                     // if (currentPlayer->getName()=="진태" && currentPlayer->card7change(dummyCard))
                     // {
                     //     change7cnt++;// 바꿨으면 count 후 턴 종료
-                    //     std::cout << "카드의 모양이 " << dummyCard->getShape() << "로 변경되었습니다." << std::endl;
+                    //     //std::cout << "카드의 모양이 " << dummyCard->getShape() << "로 변경되었습니다." << std::endl;
                     // }
                     // else if (currentPlayer->getName()=="찬우" && currentPlayer->7shapeSwitch(dummyCard))
                     // {
                     //     change7cnt++;// 바꿨으면 count 후 턴 종료
-                    //     std::cout << "카드의 모양이 " << dummyCard->getShape() << "로 변경되었습니다." << std::endl;
+                    //     //std::cout << "카드의 모양이 " << dummyCard->getShape() << "로 변경되었습니다." << std::endl;
                     // }
 
                     played = true;
@@ -364,7 +378,7 @@ std::string Game::start()
                         if (card->getValue()=="K")
                         {
                             if ((currentPlayer->getHand()).empty()) break; // 마지막 카드로 K를 사용했을 때 처리
-                            std::cout << currentPlayer->getName() << " is " << card->getValue() << "를 냈으므로 한턴 더 플레이 합니다." << std::endl;
+                            //std::cout << currentPlayer->getName() << " is " << card->getValue() << "를 냈으므로 한턴 더 플레이 합니다." << std::endl;
                             if (timeOn)
                             {
                                 std::this_thread::sleep_for(std::chrono::milliseconds(timeSleep));
@@ -373,7 +387,7 @@ std::string Game::start()
                         }
                         else if (card->getValue()=="J")
                         {
-                            std::cout << currentPlayer->getName() << " is " << card->getValue() << "를 냈으므로 다음 플레이어를 건너뜁니다." << std::endl;
+                            //std::cout << currentPlayer->getName() << " is " << card->getValue() << "를 냈으므로 다음 플레이어를 건너뜁니다." << std::endl;
                             if (timeOn)
                             {
                                 std::this_thread::sleep_for(std::chrono::milliseconds(timeSleep));
@@ -382,7 +396,7 @@ std::string Game::start()
                         }
                         else if (card->getValue()=="Q")
                         {
-                            std::cout << currentPlayer->getName() << " is " << card->getValue() << "를 냈으므로 플레이 방향이 반대로됩니다." << std::endl;
+                            //std::cout << currentPlayer->getName() << " is " << card->getValue() << "를 냈으므로 플레이 방향이 반대로됩니다." << std::endl;
                             if (timeOn)
                             {
                                 std::this_thread::sleep_for(std::chrono::milliseconds(timeSleep));
@@ -400,12 +414,12 @@ std::string Game::start()
                 auto drawnCard = deck.draw();
                 eraseUsedAttackCards();
                 currentPlayer->drawCard(drawnCard);
-                std::cout << currentPlayer->getName() << " is 낼 카드가 없어 한 장을 뽑습니다." << std::endl;
+                //std::cout << currentPlayer->getName() << " is 낼 카드가 없어 한 장을 뽑습니다." << std::endl;
                 if (timeOn)
                 {
                     std::this_thread::sleep_for(std::chrono::milliseconds(timeSleep));
                 }
-                std::cout << currentPlayer->getName() << " is 덱에서 " << drawnCard->getFullInfo() << "를 뽑았습니다." << std::endl;
+                //std::cout << currentPlayer->getName() << " is 덱에서 " << drawnCard->getFullInfo() << "를 뽑았습니다." << std::endl;
                 if (timeOn)
                 {
                     std::this_thread::sleep_for(std::chrono::milliseconds(timeSleep));
@@ -428,9 +442,9 @@ std::string Game::start()
                 ranking.push_back(players[0]);
                 pushRanking(players[0]);
                 players.erase(players.begin()); // 플레이어 제거
-                std::cout << "=================================" << std::endl;
-                std::cout << "마지막 1명만 남았으므로 게임을 종료합니다." << std::endl;
-                std::cout << "=================================" << std::endl;
+                //std::cout << "=================================" << std::endl;
+                //std::cout << "마지막 1명만 남았으므로 게임을 종료합니다." << std::endl;
+                //std::cout << "=================================" << std::endl;
                 return printRanking();
                 break;
             }
@@ -446,12 +460,12 @@ std::string Game::start()
             if (Qcnt % 2 == 1)
             {
                 std::reverse(players.begin(), players.end());
-                std::cout << "\n플레이 순서:\n";
+                //std::cout << "\n플레이 순서:\n";
                 for (size_t i=0; i<players.size() ;i++)
                 {
-                    std::cout << players[i]->getName() << "->";
+                    //std::cout << players[i]->getName() << "->";
                 }
-                std::cout << "\b\b" <<std::endl;
+                //std::cout << "\b\b" <<std::endl;
                 if (timeOn)
                 {
                     std::this_thread::sleep_for(std::chrono::milliseconds(timeSleep));
@@ -461,7 +475,7 @@ std::string Game::start()
             // 순서 반전 이후의 index를 찾아서 다음 플레이어를 지정
             auto idx = std::find(players.begin(), players.end(), currentPlayer);
             int newIndex = std::distance(players.begin(), idx);
-            //std::cout << currentPlayer->getName() <<"의 현재 index : " <<newIndex << std::endl;
+            ////std::cout << currentPlayer->getName() <<"의 현재 index : " <<newIndex << std::endl;
             currentPlayerIndex = (newIndex + 1) % players.size();
 
         }

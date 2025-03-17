@@ -10,7 +10,7 @@ JokerCard::JokerCard(std::string t) : type(t) {}
 //card의 shape과 value 출력
 void JokerCard::display() const
 {
-    std::cout << type << " Joker";
+    //std::cout << type << " Joker";
 }
 
 //card의 type("Normal"/"Joker") 반환
